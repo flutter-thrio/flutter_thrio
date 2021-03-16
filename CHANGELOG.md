@@ -293,3 +293,9 @@
 
 * feat: 移除 kotlin-android-extensions
 * feat: 适配 Flutter 2.x.x 版本
+
+## 1.8.3
+
+* fix: 回滚对 Flutter 2.x.x 的适配
+* fix: 修复一些资源释放问题
+* fix: 修复Dart异常
