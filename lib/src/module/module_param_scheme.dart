@@ -63,7 +63,7 @@ mixin ModuleParamScheme on ThrioModule {
         }
       }
       ..onCancel = () {
-        paramStreamCtrls[key].remove(sc);
+        paramStreamCtrls[key]?.remove(sc);
       };
     return sc.stream;
   }
