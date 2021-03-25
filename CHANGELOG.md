@@ -304,3 +304,7 @@
 
 * fix: 优化 dart 代码
 * fix: 修复部分使用场景下的 bug
+
+## 2.0.0
+
+* feat: 适配 Flutter 2.x.x
