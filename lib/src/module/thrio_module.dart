@@ -36,8 +36,6 @@ import 'module_json_serializer.dart';
 import 'module_page_builder.dart';
 import 'module_page_observer.dart';
 import 'module_param_scheme.dart';
-import 'module_protobuf_deserializer.dart';
-import 'module_protobuf_serializer.dart';
 import 'module_route_observer.dart';
 import 'module_route_transitions_builder.dart';
 
@@ -64,8 +62,7 @@ mixin ThrioModule {
   /// Get instance by `T`, `url` and `key`.
   ///
   /// `T` can be `ThrioModule`, `NavigatorPageBuilder`, `JsonSerializer`,
-  /// `JsonDeserializer`, `ProtobufSerializer`, `ProtobufDeserializer`,
-  /// `RouteTransitionsBuilder`, default is `ThrioModule`.
+  /// `JsonDeserializer`, `RouteTransitionsBuilder`, default is `ThrioModule`.
   ///
   /// If `T` is `ThrioModule`, returns the last module matched by the `url`.
   ///
@@ -144,8 +141,7 @@ mixin ThrioModule {
   /// `onModuleInit`, `onPageBuilderRegister`,
   /// `onRouteTransitionsBuilderRegister`, `onPageObserverRegister`
   /// `onRouteObserverRegister`, `onJsonSerializerRegister`,
-  /// `onJsonDeserializerRegister`, `onProtobufSerializerRegister`,
-  /// `onProtobufDeserializerRegister` and `onModuleAsyncInit`
+  /// `onJsonDeserializerRegister` and `onModuleAsyncInit`
   /// methods of all modules.
   ///
   @protected
@@ -183,14 +179,6 @@ mixin ThrioModule {
       }
       if (module is ModuleJsonDeserializer) {
         module.onJsonDeserializerRegister(module._moduleContext);
-      }
-    }
-    for (final module in values) {
-      if (module is ModuleProtobufSerializer) {
-        module.onProtobufSerializerRegister(module._moduleContext);
-      }
-      if (module is ModuleProtobufDeserializer) {
-        module.onProtobufDeserializerRegister(module._moduleContext);
       }
     }
     for (final module in values) {

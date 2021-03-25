@@ -87,7 +87,7 @@ mixin ModuleParamScheme on ThrioModule {
     if (value == null) {
       return null;
     }
-    if (T != dynamic && T != Object && value.runtimeType != T) {
+    if (T != dynamic && T != Object && value is! T) {
       throw ThrioException(
         '$T does not match the param scheme type: ${value.runtimeType}',
       );

@@ -108,6 +108,7 @@ class NavigatorPageRoute<TCallbackParams> extends MaterialPageRoute<bool> {
 
   @override
   void dispose() {
+    _popDisabledFutures.clear();
     super.dispose();
   }
 }

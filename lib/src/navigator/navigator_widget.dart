@@ -281,14 +281,21 @@ class NavigatorWidgetState extends State<NavigatorWidget> {
     if (url?.isEmpty ?? true && params == null) {
       poppedResultCallback(null);
     } else {
-      if (params is Map && params.containsKey('__thrio_TParams__')) {
-        // ignore: avoid_as
-        final typeString = params['__thrio_TParams__'] as String;
-        if (typeString != null) {
-          final paramsInstance =
+      if (params is Map) {
+        if (params.containsKey('__thrio_Params_HashCode__')) {
+          final paramsObjs =
+              // ignore: avoid_as
+              anchor.removeParam(params['__thrio_Params_HashCode__'] as int);
+          poppedResultCallback(paramsObjs);
+          return;
+        }
+        if (params.containsKey('__thrio_TParams__')) {
+          // ignore: avoid_as
+          final typeString = params['__thrio_TParams__'] as String;
+          final paramsObjs =
               ThrioModule.get<JsonDeserializer>(url: url, key: typeString)
                   ?.call(params.cast<String, dynamic>());
-          poppedResultCallback(paramsInstance);
+          poppedResultCallback(paramsObjs);
           return;
         }
       }

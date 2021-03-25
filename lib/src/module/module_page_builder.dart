@@ -44,13 +44,21 @@ mixin ModulePageBuilder on ThrioModule {
       parentModule = parentModule.parent;
     } while (parentModule != null && parentModule.key.isNotEmpty);
 
-    anchor.allUrls.add((StringBuffer()..writeAll(urlComponents)).toString());
+    final url = (StringBuffer()..writeAll(urlComponents)).toString();
+    if (builder == null) {
+      anchor.allUrls.remove(url);
+    } else {
+      anchor.allUrls.add(url);
+    }
+    // 处理存在 home 的 url
     if (key == kNavigatorPageDefaultUrl) {
-      anchor.allUrls.add((StringBuffer()
-            ..writeAll(
-              urlComponents..removeLast(),
-            ))
-          .toString());
+      final url =
+          (StringBuffer()..writeAll(urlComponents..removeLast())).toString();
+      if (builder == null) {
+        anchor.allUrls.remove(url);
+      } else {
+        anchor.allUrls.add(url);
+      }
     }
   }
 

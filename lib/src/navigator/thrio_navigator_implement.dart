@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../channel/thrio_channel.dart';
+import '../extension/thrio_iterable.dart';
 import '../module/module_anchor.dart';
 import '../module/module_types.dart';
 import '../module/thrio_module.dart';
@@ -197,34 +198,41 @@ class ThrioNavigatorImplement {
   Future<List<RouteSettings>> allRoutes({String url}) =>
       _sendChannel?.allRoutes(url: url);
 
-  RouteSettings lastFlutterRoute({String url}) => navigatorState?.history
-      ?.lastWhere(
-        (it) =>
-            it is NavigatorPageRoute &&
-            ((url?.isEmpty ?? true) || it.settings.url == url),
-        orElse: () => null,
-      )
-      ?.settings;
+  RouteSettings lastFlutterRoute({String url}) {
+    if (url?.isEmpty ?? true) {
+      return navigatorState?.history?.lastOrNull?.settings;
+    }
+    return navigatorState?.history
+        ?.lastWhereOrNull(
+            (it) => it is NavigatorPageRoute && it.settings.url == url)
+        ?.settings;
+  }
 
-  List<RouteSettings> allFlutterRoutes({String url}) =>
-      navigatorState?.history
-          ?.map((it) => it.settings)
-          ?.where((it) =>
-              it is NavigatorPageRoute &&
-              ((url?.isEmpty ?? true) || it.url == url))
-          ?.toList() ??
-      <RouteSettings>[];
+  List<RouteSettings> allFlutterRoutes({String url}) {
+    if (url == null || url.isEmpty) {
+      return navigatorState?.history
+              ?.whereType<NavigatorPageRoute>()
+              ?.map<RouteSettings>((it) => it.settings)
+              ?.toList() ??
+          <RouteSettings>[];
+    }
+    return navigatorState?.history
+            ?.map((it) => it.settings)
+            ?.where((it) => it is NavigatorPageRoute && it.url == url)
+            ?.toList() ??
+        <RouteSettings>[];
+  }
 
   bool isContainsInnerRoute({String url}) {
+    final routes = navigatorState?.history ?? <NavigatorPageRoute>[];
     final index = url?.isEmpty ?? true
-        ? navigatorState.history
-            .lastIndexWhere((route) => route is NavigatorPageRoute)
-        : navigatorState.history.lastIndexWhere((route) =>
+        ? routes.lastIndexWhere((route) => route is NavigatorPageRoute)
+        : routes.lastIndexWhere((route) =>
             route is NavigatorPageRoute && route.settings.url == url);
-    if (index < 0 || navigatorState.history.length <= index + 1) {
+    if (index < 0 || routes.length <= index + 1) {
       return false;
     }
-    return navigatorState.history[index + 1] is! NavigatorPageRoute;
+    return routes[index + 1] is! NavigatorPageRoute;
   }
 
   Future<bool> setPopDisabled({
@@ -262,11 +270,10 @@ class ThrioNavigatorImplement {
       // ignore: avoid_as
       final typeString = params['__thrio_TParams__'] as String;
       if (typeString?.isNotEmpty ?? false) {
-        final paramsInstance =
-            ThrioModule.get<JsonDeserializer>(key: typeString)
-                ?.call(params.cast<String, dynamic>());
-        if (paramsInstance != null) {
-          return paramsInstance;
+        final paramsObj = ThrioModule.get<JsonDeserializer>(key: typeString)
+            ?.call(params.cast<String, dynamic>());
+        if (paramsObj != null) {
+          return paramsObj;
         }
       }
     }

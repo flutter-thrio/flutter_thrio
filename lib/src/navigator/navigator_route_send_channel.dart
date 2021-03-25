@@ -27,6 +27,7 @@ import '../extension/thrio_object.dart';
 import '../module/module_anchor.dart';
 import '../module/module_types.dart';
 import '../module/thrio_module.dart';
+import 'navigator_route_settings.dart';
 
 class NavigatorRouteSendChannel {
   const NavigatorRouteSendChannel(ThrioChannel channel) : _channel = channel;
@@ -43,7 +44,7 @@ class NavigatorRouteSendChannel {
       'animated': animated,
       'params': _serializeParams<TParams>(url: url, params: params),
     };
-    return _channel.invokeMethod<int>('push', arguments);
+    return _channel.invokeMethod<int>('push', arguments).then((it) => it ?? 0);
   }
 
   Future<bool> notify<TParams>({
@@ -56,20 +57,26 @@ class NavigatorRouteSendChannel {
       'url': url,
       'index': index,
       'name': name,
-      'params': _serializeParams<TParams>(params: params),
+      'params': _serializeParams<TParams>(url: url, params: params),
     };
-    return _channel.invokeMethod<bool>('notify', arguments);
+    return _channel
+        .invokeMethod<bool>('notify', arguments)
+        .then((it) => it ?? false);
   }
 
   Future<bool> pop<TParams>({
     TParams params,
     bool animated = true,
-  }) {
+  }) async {
+    final settings = await lastRoute();
+    final url = settings?.url;
     final arguments = <String, dynamic>{
-      'params': _serializeParams<TParams>(params: params),
+      'params': _serializeParams<TParams>(url: url, params: params),
       'animated': animated,
     };
-    return _channel.invokeMethod<bool>('pop', arguments);
+    return _channel
+        .invokeMethod<bool>('pop', arguments)
+        .then((it) => it ?? false);
   }
 
   Future<bool> isInitialRoute({
@@ -80,7 +87,9 @@ class NavigatorRouteSendChannel {
       'url': url,
       'index': index,
     };
-    return _channel.invokeMethod<bool>('isInitialRoute', arguments);
+    return _channel
+        .invokeMethod<bool>('isInitialRoute', arguments)
+        .then((it) => it ?? false);
   }
 
   Future<bool> popTo({
@@ -93,7 +102,9 @@ class NavigatorRouteSendChannel {
       'index': index,
       'animated': animated,
     };
-    return _channel.invokeMethod<bool>('popTo', arguments);
+    return _channel
+        .invokeMethod<bool>('popTo', arguments)
+        .then((it) => it ?? false);
   }
 
   Future<bool> remove({
@@ -106,7 +117,9 @@ class NavigatorRouteSendChannel {
       'index': index,
       'animated': animated,
     };
-    return _channel.invokeMethod<bool>('remove', arguments);
+    return _channel
+        .invokeMethod<bool>('remove', arguments)
+        .then((it) => it ?? false);
   }
 
   Future<RouteSettings> lastRoute({String url}) {
@@ -140,7 +153,9 @@ class NavigatorRouteSendChannel {
       'index': index,
       'disabled': disabled,
     };
-    return _channel.invokeMethod<bool>('setPopDisabled', arguments);
+    return _channel
+        .invokeMethod<bool>('setPopDisabled', arguments)
+        .then((it) => it ?? false);
   }
 
   dynamic _serializeParams<TParams>({String url, TParams params}) {

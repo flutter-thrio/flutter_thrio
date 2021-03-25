@@ -54,12 +54,13 @@ class NavigatorRouteReceiveChannel {
         final animated =
             (animatedValue != null && animatedValue is bool) && animatedValue;
         return ThrioNavigatorImplement.shared()
-            .navigatorState
-            ?.push(routeSettings, animated: animated)
-            ?.then((value) {
-          _syncPagePoppedResults();
-          return value;
-        });
+                .navigatorState
+                ?.push(routeSettings, animated: animated)
+                ?.then((value) {
+              _syncPagePoppedResults();
+              return value;
+            }) ??
+            Future.value();
       });
 
   void _onPop() => _channel.registryMethodCall('pop', ([arguments]) {
@@ -71,12 +72,13 @@ class NavigatorRouteReceiveChannel {
         final inRoot =
             (inRootValue != null && inRootValue is bool) && inRootValue;
         return ThrioNavigatorImplement.shared()
-            .navigatorState
-            ?.maybePop(routeSettings, animated: animated, inRoot: inRoot)
-            ?.then((value) {
-          _syncPagePoppedResults();
-          return value;
-        });
+                .navigatorState
+                ?.maybePop(routeSettings, animated: animated, inRoot: inRoot)
+                ?.then((value) {
+              _syncPagePoppedResults();
+              return value;
+            }) ??
+            Future.value();
       });
 
   void _onPopTo() => _channel.registryMethodCall('popTo', ([arguments]) {
@@ -85,12 +87,13 @@ class NavigatorRouteReceiveChannel {
         final animated =
             (animatedValue != null && animatedValue is bool) && animatedValue;
         return ThrioNavigatorImplement.shared()
-            .navigatorState
-            ?.popTo(routeSettings, animated: animated)
-            ?.then((value) {
-          _syncPagePoppedResults();
-          return value;
-        });
+                .navigatorState
+                ?.popTo(routeSettings, animated: animated)
+                ?.then((value) {
+              _syncPagePoppedResults();
+              return value;
+            }) ??
+            Future.value();
       });
 
   void _onRemove() => _channel.registryMethodCall('remove', ([arguments]) {
@@ -99,12 +102,13 @@ class NavigatorRouteReceiveChannel {
         final animated =
             (animatedValue != null && animatedValue is bool) && animatedValue;
         return ThrioNavigatorImplement.shared()
-            .navigatorState
-            ?.remove(routeSettings, animated: animated)
-            ?.then((value) {
-          _syncPagePoppedResults();
-          return value;
-        });
+                .navigatorState
+                ?.remove(routeSettings, animated: animated)
+                ?.then((value) {
+              _syncPagePoppedResults();
+              return value;
+            }) ??
+            Future.value();
       });
 
   Stream onPageNotify({
@@ -116,8 +120,8 @@ class NavigatorRouteReceiveChannel {
           .onEventStream('__onNotify__')
           .where((arguments) =>
               arguments.containsValue(name) &&
-              (url == null || arguments.containsValue(url)) &&
-              (index == null || arguments.containsValue(index)))
+              (url == null || url.isEmpty || arguments.containsValue(url)) &&
+              (index == null || index == 0 || arguments.containsValue(index)))
           .map((arguments) => arguments['params']);
 
   dynamic _deserializeParams(String url, dynamic params) {
@@ -134,11 +138,11 @@ class NavigatorRouteReceiveChannel {
       // ignore: avoid_as
       final typeString = params['__thrio_TParams__'] as String;
       if (typeString?.isNotEmpty ?? false) {
-        final paramsInstance =
+        final paramsObj =
             ThrioModule.get<JsonDeserializer>(url: url, key: typeString)
                 ?.call(params.cast<String, dynamic>());
-        if (paramsInstance != null) {
-          return paramsInstance;
+        if (paramsObj != null) {
+          return paramsObj;
         }
       }
     }

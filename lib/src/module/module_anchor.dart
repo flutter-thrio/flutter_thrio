@@ -35,8 +35,6 @@ import 'module_json_serializer.dart';
 import 'module_page_builder.dart';
 import 'module_page_observer.dart';
 import 'module_param_scheme.dart';
-import 'module_protobuf_deserializer.dart';
-import 'module_protobuf_serializer.dart';
 import 'module_route_observer.dart';
 import 'module_route_transitions_builder.dart';
 import 'module_types.dart';
@@ -49,8 +47,6 @@ class ModuleAnchor
         ThrioModule,
         ModulePageObserver,
         ModuleJsonDeserializer,
-        ModuleProtobufSerializer,
-        ModuleProtobufDeserializer,
         ModuleParamScheme,
         ModuleJsonSerializer,
         ModuleRouteObserver,
@@ -202,27 +198,29 @@ class ModuleAnchor
   T remove<T>(Comparable key) => removeParam(key);
 
   List<ThrioModule> _getModules({String url}) {
-    var module = modules.values.first;
-    final allModules = [module];
+    if (modules.isEmpty) {
+      return <ThrioModule>[];
+    }
+
+    final firstModule = modules.values.first;
+    final allModules = [firstModule];
 
     if (url?.isEmpty ?? true) {
-      return allModules..addAll(_getAllModules(module));
+      return allModules..addAll(_getAllModules(firstModule));
     }
 
     final components = url?.isEmpty ?? true
         ? <String>[]
         : url.replaceAll('/', ' ').trim().split(' ');
     final length = components.length;
-    do {
+    var module = firstModule;
+    while (components.isNotEmpty) {
       final key = components.removeAt(0);
-      if (key?.isEmpty ?? true) {
-        break;
-      }
-      module = module.modules[key];
+      module = module?.modules[key];
       if (module != null) {
         allModules.add(module);
       }
-    } while (components.isNotEmpty);
+    }
 
     // url 不能完全匹配到 module，可能是原生的 url 或者不存在的 url
     if (allModules.length != length + 1) {
@@ -279,26 +277,6 @@ class ModuleAnchor
             final jsonDeserializer = it.getJsonDeserializer(key);
             if (jsonDeserializer != null) {
               return jsonDeserializer as T;
-            }
-          }
-        }
-        break;
-      case ProtobufSerializer:
-        for (final it in modules.reversed) {
-          if (it is ModuleProtobufSerializer) {
-            final protobufSerializer = it.getProtobufSerializer(key);
-            if (protobufSerializer != null) {
-              return protobufSerializer as T;
-            }
-          }
-        }
-        break;
-      case ProtobufDeserializer:
-        for (final it in modules.reversed) {
-          if (it is ModuleProtobufDeserializer) {
-            final protobufDeserializer = it.getProtobufDeserializer(key);
-            if (protobufDeserializer != null) {
-              return protobufDeserializer as T;
             }
           }
         }

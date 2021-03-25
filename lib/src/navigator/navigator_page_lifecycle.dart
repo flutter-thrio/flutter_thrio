@@ -98,9 +98,7 @@ class _NavigatorPageLifecycleState extends State<NavigatorPageLifecycle> {
 
   @override
   void dispose() {
-    if (_pageObserverCallback != null) {
-      _pageObserverCallback();
-    }
+    _pageObserverCallback?.call();
     super.dispose();
   }
 
@@ -115,37 +113,37 @@ class _PageLifecyclePageObserver with NavigatorPageObserver {
 
   @override
   void willAppear(RouteSettings routeSettings) {
-    if (lifecycleState.widget.willAppear != null &&
-        lifecycleState._route != null &&
-        lifecycleState._route.settings.name == routeSettings.name) {
-      lifecycleState.widget.willAppear(lifecycleState._route.settings);
-    }
+    final callback = lifecycleState.widget.willAppear;
+    _lifecycleCallback(callback, routeSettings);
   }
 
   @override
   void didAppear(RouteSettings routeSettings) {
-    if (lifecycleState.widget.didAppear != null &&
-        lifecycleState._route != null &&
-        lifecycleState._route.settings.name == routeSettings.name) {
-      lifecycleState.widget.didAppear(lifecycleState._route.settings);
-    }
+    final callback = lifecycleState.widget.didAppear;
+    _lifecycleCallback(callback, routeSettings);
   }
 
   @override
   void willDisappear(RouteSettings routeSettings) {
-    if (lifecycleState.widget.willDisappear != null &&
-        lifecycleState._route != null &&
-        lifecycleState._route.settings.name == routeSettings.name) {
-      lifecycleState.widget.willDisappear(lifecycleState._route.settings);
-    }
+    final callback = lifecycleState.widget.willDisappear;
+    _lifecycleCallback(callback, routeSettings);
   }
 
   @override
   void didDisappear(RouteSettings routeSettings) {
-    if (lifecycleState.widget.didDisappear != null &&
-        lifecycleState._route != null &&
-        lifecycleState._route.settings.name == routeSettings.name) {
-      lifecycleState.widget.didDisappear(lifecycleState._route.settings);
+    final callback = lifecycleState.widget.didDisappear;
+    _lifecycleCallback(callback, routeSettings);
+  }
+
+  void _lifecycleCallback(
+    NavigatorRouteSettingsCallback callback,
+    RouteSettings routeSettings,
+  ) {
+    if (callback != null) {
+      final route = lifecycleState._route;
+      if (route != null && route.settings.name == routeSettings.name) {
+        callback(route.settings);
+      }
     }
   }
 }

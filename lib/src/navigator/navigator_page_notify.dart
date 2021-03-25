@@ -24,6 +24,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 
 import '../extension/thrio_build_context.dart';
+import '../module/module_anchor.dart';
 import '../module/module_types.dart';
 import '../module/thrio_module.dart';
 import 'navigator_page_route.dart';
@@ -55,9 +56,6 @@ class NavigatorPageNotify extends StatefulWidget {
 }
 
 class _NavigatorPageNotifyState extends State<NavigatorPageNotify> {
-  NavigatorPageRoute _route;
-
-  Stream _notifyStream;
   StreamSubscription _notifySubscription;
 
   @override
@@ -72,19 +70,17 @@ class _NavigatorPageNotifyState extends State<NavigatorPageNotify> {
 
   @override
   void didChangeDependencies() {
-    if (widget.onPageNotify != null) {
-      _notifySubscription?.cancel();
-    }
+    _notifySubscription?.cancel();
     final state = context.stateOf<NavigatorWidgetState>();
     final route = state.history.last;
     if (route != null && route is NavigatorPageRoute) {
-      _route = route;
-      _notifyStream = ThrioNavigatorImplement.shared().onPageNotify(
-        url: _route.settings.url,
-        index: _route.settings.index,
-        name: widget.name,
-      );
-      _notifySubscription = _notifyStream.listen(_listen);
+      _notifySubscription = ThrioNavigatorImplement.shared()
+          .onPageNotify(
+            url: route.settings.url,
+            index: route.settings.index,
+            name: widget.name,
+          )
+          .listen(_listen);
     }
 
     super.didChangeDependencies();
@@ -93,6 +89,14 @@ class _NavigatorPageNotifyState extends State<NavigatorPageNotify> {
   void _listen(params) {
     if (params != null) {
       if (params is Map) {
+        if (params.containsKey('__thrio_Params_HashCode__')) {
+          final paramsObjs =
+              // ignore: avoid_as
+              anchor.removeParam(params['__thrio_Params_HashCode__'] as int);
+          widget.onPageNotify(paramsObjs);
+          return;
+        }
+
         // ignore: avoid_as
         final typeString = params['__thrio_TParams__'] as String;
         if (typeString != null) {
@@ -133,9 +137,8 @@ class _NavigatorPageNotifyState extends State<NavigatorPageNotify> {
 
   @override
   void dispose() {
-    if (widget.onPageNotify != null) {
-      _notifySubscription?.cancel();
-    }
+    _notifySubscription?.cancel();
+
     super.dispose();
   }
 
