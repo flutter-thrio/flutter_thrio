@@ -308,3 +308,7 @@
 ## 2.0.0
 
 * feat: 适配 Flutter 2.x.x
+
+## 2.0.1
+
+* fix: moduleContext.on 无法收到原生的状态
