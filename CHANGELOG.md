@@ -304,3 +304,7 @@
 
 * fix: 优化 dart 代码
 * fix: 修复部分使用场景下的 bug
+
+## 1.8.5
+
+* fix: 原生页面 pop 某些场景下可能将 Flutter 页面也 pop

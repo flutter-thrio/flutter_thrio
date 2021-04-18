@@ -137,7 +137,11 @@ class NavigatorWidgetState extends State<NavigatorWidget> {
       return Future.value(false);
     }
 
-    // 处理经过 Navigator 入栈的 Route，不管成功与否都 return false，避免原生端清栈
+    // 处理经过 Navigator 入栈的匿名 Route，不管成功与否都 return false，避免原生端清栈
+    if (settings.name?.isEmpty ?? true) {
+      return navigatorState.maybePop().then((_) => false);
+    }
+    // 拦截原生 route
     if (settings.name != history.last.settings.name) {
       return navigatorState.maybePop().then((_) => false);
     }
