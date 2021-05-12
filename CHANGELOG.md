@@ -321,7 +321,7 @@
 
 - fix: 原生页面 pop 某些场景下可能将 Flutter 页面也 pop
 
-## 2.0.4
+## 2.0.6
 
 - fix: NSStringFromClass 判断类型的错误
 - fix: ModuleContext.on 方法订阅原生状态失败
