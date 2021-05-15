@@ -245,7 +245,9 @@ NS_ASSUME_NONNULL_BEGIN
                 }
                 NSMutableArray *allNames = [NSMutableArray array];
                 for (NavigatorPageRoute *route in allRoutes) {
-                    [allNames addObject:route.settings.name];
+                    NSString *name = route.settings.name;
+                    NSDictionary *params = route.settings.params ?: [NSNull null];
+                    [allNames addObject:@{@"name":name, @"params":params}];
                 }
                 if (result) {
                     result(allNames);

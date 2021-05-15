@@ -137,9 +137,12 @@ class NavigatorRouteSendChannel {
         ? <String, dynamic>{}
         : <String, dynamic>{'url': url};
     return _channel
-        .invokeListMethod<String>('allRoutes', arguments)
+        .invokeListMethod<Map>('allRoutes', arguments)
         .then<List<RouteSettings>>((values) => values
-            .map<RouteSettings>((value) => RouteSettings(name: value))
+            .map<RouteSettings>((value) => RouteSettings(
+                // ignore: avoid_as
+                name: value['name'] as String,
+                arguments: value['params']))
             .toList());
   }
 

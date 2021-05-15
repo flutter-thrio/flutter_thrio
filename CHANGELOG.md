@@ -325,3 +325,7 @@
 
 - fix: NSStringFromClass 判断类型的错误
 - fix: ModuleContext.on 方法订阅原生状态失败
+
+## 2.0.10
+
+- fix: allRoutes 路由参数没有从原生传递到 Flutter

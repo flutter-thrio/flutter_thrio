@@ -127,7 +127,12 @@ internal class RouteReceiveChannel(
             if (arguments == null) return@registryMethod
             val url = if (arguments["url"] != null) arguments["url"] as String else null
             val routes = ThrioNavigator.allRoutes(url)
-            val routeNames = routes.map { it.settings.name }
+            val routeNames = routes.map {
+                mapOf(
+                    "name" to it.settings.name,
+                    "params" to it.settings.params
+                )
+            }
             result(routeNames)
         }
     }
