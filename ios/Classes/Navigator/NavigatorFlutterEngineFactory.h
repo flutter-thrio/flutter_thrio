@@ -52,10 +52,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)popViewController:(NavigatorFlutterViewController *)viewController;
 
-//- (void)registerFlutterUrls:(NSArray *)urls;
-//
-//- (void)unregisterFlutterUrls:(NSArray *)urls;
-
 @end
 
 NS_ASSUME_NONNULL_END

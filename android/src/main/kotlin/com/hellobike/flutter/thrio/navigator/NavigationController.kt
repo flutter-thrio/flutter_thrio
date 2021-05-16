@@ -38,6 +38,7 @@ import com.hellobike.flutter.thrio.module.ModuleIntentBuilders
 import com.hellobike.flutter.thrio.module.ModuleJsonSerializers
 import com.hellobike.flutter.thrio.module.ModuleRouteObservers
 import io.flutter.embedding.android.ThrioActivity
+import io.flutter.embedding.android.ThrioFlutterActivity
 import java.lang.ref.WeakReference
 
 internal object NavigationController : Application.ActivityLifecycleCallbacks {
@@ -46,6 +47,20 @@ internal object NavigationController : Application.ActivityLifecycleCallbacks {
         if (PageRoutes.firstRouteHolder?.allRoute()?.isNotEmpty() == true) {
             val settings = PageRoutes.firstRouteHolder?.firstRoute()?.settings
             return settings?.url == url && settings.index == index
+        }
+        return false
+    }
+
+    fun hotRestart(): Boolean {
+        val holders = PageRoutes.routeHolders
+        for (holder in holders) {
+            if (holder.clazz is ThrioFlutterActivity) {
+                holder.firstRoute()?.apply {
+                    // 实现过于繁琐，暂时不继续了
+//                    PopTo.popTo(settings.url, settings.index, animated = false)
+//                    Push.push(settings.url, settings.params, animated = false) { }
+                }
+            }
         }
         return false
     }
