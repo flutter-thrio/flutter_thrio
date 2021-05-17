@@ -53,8 +53,7 @@ class ModuleAnchor
         ModuleRouteTransitionsBuilder {
   /// Holds PageObserver registered by `NavigatorPageLifecycle`.
   ///
-  final pageLifecycleObservers =
-      RegistrySetMap<String, NavigatorPageObserver>();
+  final pageLifecycleObservers = RegistrySetMap<String, NavigatorPageObserver>();
 
   /// All registered urls.
   ///
@@ -152,8 +151,7 @@ class ModuleAnchor
             if (it.routeTransitionsDisabled) {
               return null;
             }
-            if (!it.routeTransitionsDisabled &&
-                it.routeTransitionsBuilder != null) {
+            if (!it.routeTransitionsDisabled && it.routeTransitionsBuilder != null) {
               return it.routeTransitionsBuilder as T;
             }
           }
@@ -209,9 +207,7 @@ class ModuleAnchor
       return allModules..addAll(_getAllModules(firstModule));
     }
 
-    final components = url?.isEmpty ?? true
-        ? <String>[]
-        : url.replaceAll('/', ' ').trim().split(' ');
+    final components = url?.isEmpty ?? true ? <String>[] : url.replaceAll('/', ' ').trim().split(' ');
     final length = components.length;
     var module = firstModule;
     while (components.isNotEmpty) {
@@ -227,8 +223,7 @@ class ModuleAnchor
       return null;
     }
 
-    if (!url.endsWith(kNavigatorPageDefaultUrl) &&
-        allModules.last.modules.containsKey(kNavigatorPageDefaultUrl)) {
+    if (!url.endsWith(kNavigatorPageDefaultUrl) && allModules.last.modules.containsKey(kNavigatorPageDefaultUrl)) {
       allModules.add(allModules.last.modules[kNavigatorPageDefaultUrl]);
     }
 

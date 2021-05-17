@@ -59,9 +59,7 @@ class NavigatorRouteSendChannel {
       'name': name,
       'params': _serializeParams<TParams>(url: url, params: params),
     };
-    return _channel
-        .invokeMethod<bool>('notify', arguments)
-        .then((it) => it ?? false);
+    return _channel.invokeMethod<bool>('notify', arguments).then((it) => it ?? false);
   }
 
   Future<bool> pop<TParams>({
@@ -74,9 +72,7 @@ class NavigatorRouteSendChannel {
       'params': _serializeParams<TParams>(url: url, params: params),
       'animated': animated,
     };
-    return _channel
-        .invokeMethod<bool>('pop', arguments)
-        .then((it) => it ?? false);
+    return _channel.invokeMethod<bool>('pop', arguments).then((it) => it ?? false);
   }
 
   Future<bool> isInitialRoute({
@@ -87,9 +83,7 @@ class NavigatorRouteSendChannel {
       'url': url,
       'index': index,
     };
-    return _channel
-        .invokeMethod<bool>('isInitialRoute', arguments)
-        .then((it) => it ?? false);
+    return _channel.invokeMethod<bool>('isInitialRoute', arguments).then((it) => it ?? false);
   }
 
   Future<bool> popTo({
@@ -102,9 +96,7 @@ class NavigatorRouteSendChannel {
       'index': index,
       'animated': animated,
     };
-    return _channel
-        .invokeMethod<bool>('popTo', arguments)
-        .then((it) => it ?? false);
+    return _channel.invokeMethod<bool>('popTo', arguments).then((it) => it ?? false);
   }
 
   Future<bool> remove({
@@ -117,30 +109,20 @@ class NavigatorRouteSendChannel {
       'index': index,
       'animated': animated,
     };
-    return _channel
-        .invokeMethod<bool>('remove', arguments)
-        .then((it) => it ?? false);
+    return _channel.invokeMethod<bool>('remove', arguments).then((it) => it ?? false);
   }
 
   Future<RouteSettings> lastRoute({String url}) {
-    final arguments = (url?.isEmpty ?? true)
-        ? <String, dynamic>{}
-        : <String, dynamic>{'url': url};
+    final arguments = (url?.isEmpty ?? true) ? <String, dynamic>{} : <String, dynamic>{'url': url};
     return _channel
         .invokeMethod<String>('lastRoute', arguments)
-        .then<RouteSettings>(
-            (value) => value == null ? null : RouteSettings(name: value));
+        .then<RouteSettings>((value) => value == null ? null : RouteSettings(name: value));
   }
 
   Future<List<RouteSettings>> allRoutes({String url}) {
-    final arguments = (url?.isEmpty ?? true)
-        ? <String, dynamic>{}
-        : <String, dynamic>{'url': url};
-    return _channel
-        .invokeListMethod<String>('allRoutes', arguments)
-        .then<List<RouteSettings>>((values) => values
-            .map<RouteSettings>((value) => RouteSettings(name: value))
-            .toList());
+    final arguments = (url?.isEmpty ?? true) ? <String, dynamic>{} : <String, dynamic>{'url': url};
+    return _channel.invokeListMethod<String>('allRoutes', arguments).then<List<RouteSettings>>(
+        (values) => values.map<RouteSettings>((value) => RouteSettings(name: value)).toList());
   }
 
   Future<bool> setPopDisabled({
@@ -153,9 +135,7 @@ class NavigatorRouteSendChannel {
       'index': index,
       'disabled': disabled,
     };
-    return _channel
-        .invokeMethod<bool>('setPopDisabled', arguments)
-        .then((it) => it ?? false);
+    return _channel.invokeMethod<bool>('setPopDisabled', arguments).then((it) => it ?? false);
   }
 
   dynamic _serializeParams<TParams>({String url, TParams params}) {
@@ -164,13 +144,12 @@ class NavigatorRouteSendChannel {
     }
     final type = params.runtimeType;
     if (type != dynamic && type != Object && params.isComplexType) {
-      final serializeParams =
-          ThrioModule.get<JsonSerializer>(url: url, key: type.toString())
-              ?.call(<type>() => params as type); // ignore: avoid_as
+      final serializeParams = ThrioModule.get<JsonSerializer>(url: url, key: type.toString())
+          ?.call(<type>() => params as type); // ignore: avoid_as
       if (serializeParams != null) {
         serializeParams['__thrio_TParams__'] = type.toString();
         // 判断 url 是否是当前引擎下的，如果是则直接缓存参数并传递 hashCode
-        if (ThrioModule.contains(url) != null) {
+        if (ThrioModule.contains(url) == true) {
           final hashCode = params.hashCode;
           anchor.set(hashCode, params);
           serializeParams['__thrio_Params_HashCode__'] = hashCode;
@@ -178,7 +157,7 @@ class NavigatorRouteSendChannel {
         return serializeParams;
       }
       // 判断 url 是否是当前引擎下的，如果是则直接缓存参数并传递 hashCode
-      if (ThrioModule.contains(url) != null) {
+      if (ThrioModule.contains(url) == true) {
         final hashCode = params.hashCode;
         anchor.set(hashCode, params);
         return {'__thrio_Params_HashCode__': hashCode};

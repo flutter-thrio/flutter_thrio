@@ -73,13 +73,11 @@ mixin ThrioModule {
   /// `NavigatorPageBuilder`, and `url` is null or empty, find instance of `T`
   /// in all modules.
   ///
-  static T get<T>({String url, String key}) =>
-      anchor.get<T>(url: url, key: key);
+  static T get<T>({String url, String key}) => anchor.get<T>(url: url, key: key);
 
   /// Returns true if the `url` has been registered.
   ///
-  static bool contains(String url) =>
-      anchor.get<NavigatorPageBuilder>(url: url) != null;
+  static bool contains(String url) => anchor.get<NavigatorPageBuilder>(url: url) != null;
 
   /// Get instances by `T` and `url`.
   ///
@@ -126,8 +124,7 @@ mixin ThrioModule {
         'A module with the same key ${module.key} already exists',
       );
     } else {
-      final submoduleContext =
-          ModuleContext(entrypoint: moduleContext.entrypoint);
+      final submoduleContext = ModuleContext(entrypoint: moduleContext.entrypoint);
       moduleOf[submoduleContext] = module;
       modules[module.key] = module;
       parentOf[module] = this;

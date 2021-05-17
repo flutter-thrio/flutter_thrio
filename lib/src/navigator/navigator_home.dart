@@ -36,18 +36,13 @@ class _NavigatorHomeState extends State<NavigatorHome> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          brightness: Brightness.light,
-          backgroundColor: Colors.white,
-          title: const Text('...', style: TextStyle(color: Colors.blue)),
-        ),
+            brightness: Brightness.light,
+            backgroundColor: Colors.white,
+            title: const Text('...', style: TextStyle(color: Colors.blue))),
         body: Center(
             child: SingleChildScrollView(
                 child: Column(children: <Widget>[
-          const SizedBox(
-            width: 60,
-            height: 60,
-            child: CircularProgressIndicator(),
-          ),
+          const SizedBox(width: 60, height: 60, child: CircularProgressIndicator()),
           if (widget.showRestartButton)
             InkWell(
               onTap: () => ThrioNavigatorImplement.shared().hotRestart(),
@@ -55,10 +50,7 @@ class _NavigatorHomeState extends State<NavigatorHome> {
                   padding: const EdgeInsets.only(top: 160),
                   child: const Text(
                     'hot restart',
-                    style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.blue,
-                        decoration: TextDecoration.underline),
+                    style: TextStyle(fontSize: 22, color: Colors.blue, decoration: TextDecoration.underline),
                   )),
             ),
         ]))),

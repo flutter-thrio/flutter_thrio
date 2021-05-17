@@ -325,3 +325,8 @@
 
 - fix: NSStringFromClass 判断类型的错误
 - fix: ModuleContext.on 方法订阅原生状态失败
+
+## 2.0.8
+
+- fix: \_serializeParams logic error
+- feat: code format for line length 100

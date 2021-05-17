@@ -51,8 +51,6 @@ mixin ModuleJsonDeserializer on ThrioModule {
   /// Unregistry by calling the return value `VoidCallback`.
   ///
   @protected
-  VoidCallback registerJsonDeserializer<T>(
-    JsonDeserializer<T> deserializer,
-  ) =>
+  VoidCallback registerJsonDeserializer<T>(JsonDeserializer<T> deserializer) =>
       _jsonDeserializers.registry(T, deserializer);
 }

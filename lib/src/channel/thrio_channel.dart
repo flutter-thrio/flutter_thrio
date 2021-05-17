@@ -33,8 +33,7 @@ typedef MethodHandler = Future<dynamic> Function([
 const String _kEventNameKey = '__event_name__';
 
 class ThrioChannel {
-  factory ThrioChannel({String channel = '__thrio_channel__'}) =>
-      ThrioChannel._(channel: channel);
+  factory ThrioChannel({String channel = '__thrio_channel__'}) => ThrioChannel._(channel: channel);
 
   ThrioChannel._({String channel}) : _channel = channel;
 
@@ -122,8 +121,7 @@ class ThrioChannel {
     }
     _eventChannel = EventChannel('_event_$_channel')
       ..receiveBroadcastStream()
-          .map<Map<String, dynamic>>(
-              (data) => data is Map ? data.cast<String, dynamic>() : null)
+          .map<Map<String, dynamic>>((data) => data is Map ? data.cast<String, dynamic>() : null)
           .where((data) => data?.containsKey(_kEventNameKey) ?? false)
           .listen((data) {
         verbose('Notify on $_channel $data');

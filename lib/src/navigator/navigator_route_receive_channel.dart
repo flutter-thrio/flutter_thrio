@@ -46,17 +46,10 @@ class NavigatorRouteReceiveChannel {
           'push: url->${routeSettings.url} '
           'index->${routeSettings.index}',
         );
-        routeSettings.params = _deserializeParams(
-          routeSettings.url,
-          routeSettings.params,
-        );
+        routeSettings.params = _deserializeParams(routeSettings.url, routeSettings.params);
         final animatedValue = arguments['animated'];
-        final animated =
-            (animatedValue != null && animatedValue is bool) && animatedValue;
-        return ThrioNavigatorImplement.shared()
-                .navigatorState
-                ?.push(routeSettings, animated: animated)
-                ?.then((value) {
+        final animated = (animatedValue != null && animatedValue is bool) && animatedValue;
+        return ThrioNavigatorImplement.shared().navigatorState?.push(routeSettings, animated: animated)?.then((value) {
               _syncPagePoppedResults();
               return value;
             }) ??
@@ -66,11 +59,9 @@ class NavigatorRouteReceiveChannel {
   void _onPop() => _channel.registryMethodCall('pop', ([arguments]) {
         final routeSettings = NavigatorRouteSettings.fromArguments(arguments);
         final animatedValue = arguments['animated'];
-        final animated =
-            (animatedValue != null && animatedValue is bool) && animatedValue;
+        final animated = (animatedValue != null && animatedValue is bool) && animatedValue;
         final inRootValue = arguments['inRoot'];
-        final inRoot =
-            (inRootValue != null && inRootValue is bool) && inRootValue;
+        final inRoot = (inRootValue != null && inRootValue is bool) && inRootValue;
         return ThrioNavigatorImplement.shared()
                 .navigatorState
                 ?.maybePop(routeSettings, animated: animated, inRoot: inRoot)
@@ -84,12 +75,8 @@ class NavigatorRouteReceiveChannel {
   void _onPopTo() => _channel.registryMethodCall('popTo', ([arguments]) {
         final routeSettings = NavigatorRouteSettings.fromArguments(arguments);
         final animatedValue = arguments['animated'];
-        final animated =
-            (animatedValue != null && animatedValue is bool) && animatedValue;
-        return ThrioNavigatorImplement.shared()
-                .navigatorState
-                ?.popTo(routeSettings, animated: animated)
-                ?.then((value) {
+        final animated = (animatedValue != null && animatedValue is bool) && animatedValue;
+        return ThrioNavigatorImplement.shared().navigatorState?.popTo(routeSettings, animated: animated)?.then((value) {
               _syncPagePoppedResults();
               return value;
             }) ??
@@ -99,8 +86,7 @@ class NavigatorRouteReceiveChannel {
   void _onRemove() => _channel.registryMethodCall('remove', ([arguments]) {
         final routeSettings = NavigatorRouteSettings.fromArguments(arguments);
         final animatedValue = arguments['animated'];
-        final animated =
-            (animatedValue != null && animatedValue is bool) && animatedValue;
+        final animated = (animatedValue != null && animatedValue is bool) && animatedValue;
         return ThrioNavigatorImplement.shared()
                 .navigatorState
                 ?.remove(routeSettings, animated: animated)
@@ -139,8 +125,7 @@ class NavigatorRouteReceiveChannel {
       final typeString = params['__thrio_TParams__'] as String;
       if (typeString?.isNotEmpty ?? false) {
         final paramsObj =
-            ThrioModule.get<JsonDeserializer>(url: url, key: typeString)
-                ?.call(params.cast<String, dynamic>());
+            ThrioModule.get<JsonDeserializer>(url: url, key: typeString)?.call(params.cast<String, dynamic>());
         if (paramsObj != null) {
           return paramsObj;
         }
@@ -158,8 +143,6 @@ class NavigatorRouteReceiveChannel {
     if (routes?.isEmpty ?? true) {
       ThrioNavigatorImplement.shared().poppedResults.clear();
     }
-    ThrioNavigatorImplement.shared()
-        .poppedResults
-        .removeWhere((name, _) => !routes.any((it) => it.name == name));
+    ThrioNavigatorImplement.shared().poppedResults.removeWhere((name, _) => !routes.any((it) => it.name == name));
   }
 }

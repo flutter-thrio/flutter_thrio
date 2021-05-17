@@ -154,10 +154,7 @@ mixin ModuleParamScheme on ThrioModule {
     if (this == anchor) {
       return _params.remove(key) as T; // ignore: avoid_as
     }
-    if (T != dynamic &&
-        T != Object &&
-        _paramSchemes.keys.contains(key) &&
-        _paramSchemes[key] != T) {
+    if (T != dynamic && T != Object && _paramSchemes.keys.contains(key) && _paramSchemes[key] != T) {
       throw ThrioException(
         '$T does not match the param scheme type: ${_paramSchemes[key]}',
       );

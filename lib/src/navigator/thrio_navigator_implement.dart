@@ -40,20 +40,16 @@ import 'navigator_types.dart';
 import 'navigator_widget.dart';
 
 class ThrioNavigatorImplement {
-  factory ThrioNavigatorImplement.shared() =>
-      _default ??= ThrioNavigatorImplement._();
+  factory ThrioNavigatorImplement.shared() => _default ??= ThrioNavigatorImplement._();
 
   ThrioNavigatorImplement._();
 
   static ThrioNavigatorImplement _default;
 
   void init(ModuleContext moduleContext) {
-    _channel = ThrioChannel(
-      channel: '__thrio_app__${moduleContext.entrypoint}',
-    );
-    ThrioChannel(
-      channel: '__thrio_module_context__${moduleContext.entrypoint}',
-    ).registryMethodCall('set', ([arguments]) async {
+    _channel = ThrioChannel(channel: '__thrio_app__${moduleContext.entrypoint}');
+    ThrioChannel(channel: '__thrio_module_context__${moduleContext.entrypoint}').registryMethodCall('set', (
+        [arguments]) async {
       for (final key in arguments.keys) {
         final value = arguments[key];
         if (value == null) {
@@ -115,20 +111,11 @@ class ThrioNavigatorImplement {
     bool animated = true,
     NavigatorParamsCallback poppedResult,
   }) =>
-      _sendChannel
-          ?.push<TParams>(
-        url: url,
-        params: params,
-        animated: animated,
-      )
-          ?.then<int>((index) {
+      _sendChannel?.push<TParams>(url: url, params: params, animated: animated)?.then<int>((index) {
         if (poppedResult != null && index != null && index > 0) {
           final routeName = '$index $url';
-          final routeHistory =
-              ThrioNavigatorImplement.shared().navigatorState?.history;
-          final route = routeHistory.lastWhere(
-              (it) => it.settings.name == routeName,
-              orElse: () => null);
+          final routeHistory = ThrioNavigatorImplement.shared().navigatorState?.history;
+          final route = routeHistory.lastWhere((it) => it.settings.name == routeName, orElse: () => null);
           if (route != null && route is NavigatorPageRoute) {
             route.poppedResult = poppedResult;
           } else {
@@ -139,72 +126,30 @@ class ThrioNavigatorImplement {
         return index;
       });
 
-  Future<bool> notify<TParams>({
-    String url,
-    int index,
-    @required String name,
-    TParams params,
-  }) =>
-      _sendChannel?.notify<TParams>(
-        name: name,
-        url: url,
-        index: index,
-        params: params,
-      );
+  Future<bool> notify<TParams>({String url, int index, @required String name, TParams params}) =>
+      _sendChannel?.notify<TParams>(name: name, url: url, index: index, params: params);
 
-  Future<bool> pop<TParams>({
-    TParams params,
-    bool animated = true,
-  }) =>
-      _sendChannel?.pop<TParams>(
-        params: params,
-        animated: animated,
-      );
+  Future<bool> pop<TParams>({TParams params, bool animated = true}) =>
+      _sendChannel?.pop<TParams>(params: params, animated: animated);
 
-  Future<bool> popTo({
-    @required String url,
-    int index,
-    bool animated = true,
-  }) =>
-      _sendChannel?.popTo(
-        url: url,
-        index: index,
-        animated: animated,
-      );
+  Future<bool> popTo({@required String url, int index, bool animated = true}) =>
+      _sendChannel?.popTo(url: url, index: index, animated: animated);
 
-  Future<bool> remove({
-    @required String url,
-    int index,
-    bool animated = true,
-  }) =>
-      _sendChannel?.remove(
-        url: url,
-        index: index,
-        animated: animated,
-      );
+  Future<bool> remove({@required String url, int index, bool animated = true}) =>
+      _sendChannel?.remove(url: url, index: index, animated: animated);
 
-  Future<bool> isInitialRoute({
-    String url,
-    int index,
-  }) =>
-      _sendChannel?.isInitialRoute(
-        url: url,
-        index: index,
-      );
+  Future<bool> isInitialRoute({String url, int index}) => _sendChannel?.isInitialRoute(url: url, index: index);
 
-  Future<RouteSettings> lastRoute({String url}) =>
-      _sendChannel?.lastRoute(url: url);
+  Future<RouteSettings> lastRoute({String url}) => _sendChannel?.lastRoute(url: url);
 
-  Future<List<RouteSettings>> allRoutes({String url}) =>
-      _sendChannel?.allRoutes(url: url);
+  Future<List<RouteSettings>> allRoutes({String url}) => _sendChannel?.allRoutes(url: url);
 
   RouteSettings lastFlutterRoute({String url}) {
     if (url?.isEmpty ?? true) {
       return navigatorState?.history?.lastOrNull?.settings;
     }
     return navigatorState?.history
-        ?.lastWhereOrNull(
-            (it) => it is NavigatorPageRoute && it.settings.url == url)
+        ?.lastWhereOrNull((it) => it is NavigatorPageRoute && it.settings.url == url)
         ?.settings;
   }
 
@@ -227,35 +172,18 @@ class ThrioNavigatorImplement {
     final routes = navigatorState?.history ?? <NavigatorPageRoute>[];
     final index = url?.isEmpty ?? true
         ? routes.lastIndexWhere((route) => route is NavigatorPageRoute)
-        : routes.lastIndexWhere((route) =>
-            route is NavigatorPageRoute && route.settings.url == url);
+        : routes.lastIndexWhere((route) => route is NavigatorPageRoute && route.settings.url == url);
     if (index < 0 || routes.length <= index + 1) {
       return false;
     }
     return routes[index + 1] is! NavigatorPageRoute;
   }
 
-  Future<bool> setPopDisabled({
-    @required String url,
-    int index,
-    bool disabled = true,
-  }) =>
-      _sendChannel?.setPopDisabled(
-        url: url,
-        index: index,
-        disabled: disabled,
-      );
+  Future<bool> setPopDisabled({@required String url, int index, bool disabled = true}) =>
+      _sendChannel?.setPopDisabled(url: url, index: index, disabled: disabled);
 
-  Stream onPageNotify({
-    @required String name,
-    String url,
-    int index,
-  }) =>
-      _receiveChannel?.onPageNotify(
-        name: name,
-        url: url,
-        index: index,
-      );
+  Stream onPageNotify({@required String name, String url, int index}) =>
+      _receiveChannel?.onPageNotify(name: name, url: url, index: index);
 
   void hotRestart() {
     _channel?.invokeMethod<bool>('hotRestart');
@@ -270,8 +198,7 @@ class ThrioNavigatorImplement {
       // ignore: avoid_as
       final typeString = params['__thrio_TParams__'] as String;
       if (typeString?.isNotEmpty ?? false) {
-        final paramsObj = ThrioModule.get<JsonDeserializer>(key: typeString)
-            ?.call(params.cast<String, dynamic>());
+        final paramsObj = ThrioModule.get<JsonDeserializer>(key: typeString)?.call(params.cast<String, dynamic>());
         if (paramsObj != null) {
           return paramsObj;
         }

@@ -27,8 +27,7 @@ import 'thrio_module.dart';
 mixin ModuleRouteTransitionsBuilder on ThrioModule {
   RouteTransitionsBuilder _routeTransitionsBuilder;
   @protected
-  RouteTransitionsBuilder get routeTransitionsBuilder =>
-      _routeTransitionsBuilder;
+  RouteTransitionsBuilder get routeTransitionsBuilder => _routeTransitionsBuilder;
 
   set routeTransitionsBuilder(RouteTransitionsBuilder value) {
     if (value == null) {

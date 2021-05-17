@@ -51,8 +51,5 @@ mixin ModuleJsonSerializer on ThrioModule {
   /// Unregistry by calling the return value `VoidCallback`.
   ///
   @protected
-  VoidCallback registerJsonSerializer<T>(
-    JsonSerializer serializer,
-  ) =>
-      _jsonSerializers.registry(T, serializer);
+  VoidCallback registerJsonSerializer<T>(JsonSerializer serializer) => _jsonSerializers.registry(T, serializer);
 }
