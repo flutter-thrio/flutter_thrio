@@ -294,7 +294,7 @@ internal object NavigationController : Application.ActivityLifecycleCallbacks {
             routeAction = RouteAction.POP
             PageRoutes.willAppearPageId = 0
 
-            val firstHolder = PageRoutes.firstRouteHolder!!
+            val firstHolder = PageRoutes.firstRouteHolder ?: return
             if (PageRoutes.routeHolders.count() == 1 && firstHolder.allRoute().count() < 2) {
                 val activity = firstHolder.activity?.get() ?: return
                 if (activity is ThrioActivity) {
