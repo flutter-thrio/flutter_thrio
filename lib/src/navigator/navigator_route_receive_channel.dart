@@ -33,6 +33,7 @@ class NavigatorRouteReceiveChannel {
     _onPop();
     _onPopTo();
     _onRemove();
+    _onFakePopForAndroid();
   }
 
   final ThrioChannel _channel;
@@ -110,6 +111,20 @@ class NavigatorRouteReceiveChannel {
           (url == null || url.isEmpty || arguments.containsValue(url)) &&
           (index == 0 || arguments.containsValue(index)))
       .map((arguments) => arguments['params']);
+
+  void _onFakePopForAndroid() =>
+      _channel.registryMethodCall('fakePopForAndroid', ([arguments]) {
+        final routeSettings = NavigatorRouteSettings.fromArguments(arguments);
+        if (routeSettings == null) {
+          return Future.value(false);
+        }
+
+        return ThrioNavigatorImplement.shared()
+            .navigatorState
+            ?.fakePopForAndroid(routeSettings)
+            .then((value) => value) ??
+            Future.value(null);
+      });
 
   dynamic _deserializeParams(String url, dynamic params) {
     if (params == null) {

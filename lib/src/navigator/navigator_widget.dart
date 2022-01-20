@@ -236,6 +236,26 @@ class NavigatorWidgetState extends State<NavigatorWidget> {
     return Future.value(true);
   }
 
+  Future<bool> fakePopForAndroid(RouteSettings settings) async {
+    final navigatorState = widget.child.tryStateOf<NavigatorState>();
+    if (navigatorState == null) {
+      return false;
+    }
+    if (settings.name != history.last.settings.name) {
+      final poppedResults = ThrioNavigatorImplement.shared().poppedResults;
+      if (poppedResults.containsKey(settings.name)) {
+
+        // 不匹配的时候，调用 poppedResult 回调
+        final poppedResult = poppedResults.remove(settings.name);
+        if (poppedResult != null) {
+          _poppedResultCallback(poppedResult, settings.url, settings.params);
+        }
+        return false;
+      }
+    }
+    return true;
+  }
+
   @override
   void initState() {
     super.initState();
