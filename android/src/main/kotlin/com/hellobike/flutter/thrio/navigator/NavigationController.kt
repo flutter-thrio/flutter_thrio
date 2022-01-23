@@ -462,16 +462,4 @@ internal object NavigationController : Application.ActivityLifecycleCallbacks {
             }
         }
     }
-
-    object FakePopForAndroid {
-        fun <T>fakePopForAndroid(
-            params: T? = null,
-            result: BooleanCallback? = null
-        ) {
-            PageRoutes.fakePopForAndroid<T>(params) {
-                result?.invoke(it == true)
-                routeAction = RouteAction.NONE
-            }
-        }
-    }
 }

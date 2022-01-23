@@ -358,19 +358,6 @@ internal object PageRoutes : Application.ActivityLifecycleCallbacks {
         }
     }
 
-    fun <T> fakePopForAndroid(
-        params: T?,
-        result: NullableBooleanCallback
-    ) {
-        val holder = routeHolders.lastOrNull()
-        if (holder == null) {
-            result(false)
-            return
-        }
-
-        holder.fakePopForAndroid<T>(params) { it -> result(it) }
-    }
-
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             var pageId = activity.intent.getPageId()

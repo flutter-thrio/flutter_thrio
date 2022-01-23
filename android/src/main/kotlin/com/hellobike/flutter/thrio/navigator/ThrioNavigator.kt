@@ -118,15 +118,6 @@ object ThrioNavigator {
 
     @JvmStatic
     @JvmOverloads
-    fun <T> fakePopForAndroid(
-        params: T? = null,
-        result: BooleanCallback = {}
-    ) {
-        NavigationController.FakePopForAndroid.fakePopForAndroid<T>(params, result)
-    }
-
-    @JvmStatic
-    @JvmOverloads
     fun lastRoute(url: String? = null): PageRoute? = PageRoutes.lastRoute(url)
 
     @JvmStatic

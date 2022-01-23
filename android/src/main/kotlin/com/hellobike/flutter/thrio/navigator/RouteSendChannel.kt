@@ -74,14 +74,4 @@ internal class RouteSendChannel constructor(private val channel: ThrioChannel) {
             }
         }
     }
-
-    fun onFakePopForAndroid(arguments: Map<String, Any?>?, result: BooleanCallback) {
-        channel.invokeMethod("fakePopForAndroid", arguments) {
-            if (it is Boolean) {
-                result(it)
-            } else {
-                result(false)
-            }
-        }
-    }
 }

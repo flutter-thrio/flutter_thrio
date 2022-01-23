@@ -246,26 +246,6 @@ internal data class PageRouteHolder(
         }
     }
 
-    fun <T> fakePopForAndroid(
-        params: T?,
-        result: NullableBooleanCallback
-    ) {
-        val lastRoute = lastRoute()
-        if (lastRoute == null) {
-            result(false)
-            return
-        }
-
-        if (lastRoute.fromEntrypoint != NAVIGATION_NATIVE_ENTRYPOINT) {
-            lastRoute.settings.params = ModuleJsonSerializers.serializeParams(params)
-            lastRoute.settings.animated = false
-
-            FlutterEngineFactory.getEngine(lastRoute.fromEntrypoint)?.sendChannel?.onFakePopForAndroid(
-                lastRoute.settings.toArguments()
-            ) {}
-        }
-    }
-
     companion object {
         private const val TAG = "PageRouteHolder"
     }
