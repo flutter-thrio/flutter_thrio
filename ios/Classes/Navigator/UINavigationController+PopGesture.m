@@ -102,6 +102,14 @@
     if (delegate != self.thrio_navigationControllerDelegate) {
         self.thrio_navigationControllerDelegate.originDelegate = delegate;
     }
+    
+    if ([@"WKRichFileUploadPanel" isEqualToString: NSStringFromClass([delegate class])]) {
+        [self setValue:delegate forKey:@"_delegate"];
+    }
+    
+    if ([@"WKRichFileUploadPanel" isEqualToString: NSStringFromClass([self.thrio_navigationControllerDelegate.originDelegate class])]) {
+        [self setValue:self.thrio_navigationControllerDelegate.originDelegate forKey:@"_delegate"];
+    }
 }
 
 @end
