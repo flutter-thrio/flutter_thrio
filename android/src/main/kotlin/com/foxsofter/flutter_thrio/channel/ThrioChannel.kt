@@ -58,6 +58,12 @@ class ThrioChannel(
     private val methodHandlers = RegistryMap<String, MethodHandler>()
 
     private val eventHandlers = RegistrySetMap<String, EventHandler>()
+    companion object{
+        private var flutterToNotify : FlutterToNotify?=null;
+        fun setFluttertoNotify(flutterToNotify:FlutterToNotify){
+            this.flutterToNotify=flutterToNotify
+        }
+    }
 
     fun setupMethodChannel(messenger: BinaryMessenger) {
         val methodChannelName = "_method_$channelName"
@@ -70,7 +76,11 @@ class ThrioChannel(
                 try {
                     @Suppress("UNCHECKED_CAST")
                     val args =
-                        if (call.arguments == null) null else call.arguments as Map<String, Any?>
+                        if (call.arguments == null) null else call.arguments as MutableMap<String, Any?>
+                    if(call.method.equals("notify")&&args!=null){
+                        flutterToNotify?.notify(args)
+                    }
+
                     methodHandler.invoke(args) {
                         result.success(it)
                     }

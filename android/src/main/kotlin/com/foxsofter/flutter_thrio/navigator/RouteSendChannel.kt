@@ -37,8 +37,18 @@ internal class RouteSendChannel constructor(internal val channel: ThrioChannel) 
 
     fun onNotify(arguments: Map<String, Any?>?, result: BooleanCallback) {
         Log.i("Thrio", "onNotify channel data $arguments")
-        channel.sendEvent("__onNotify__", arguments)
-        result(true)
+        if ((arguments?.get("key") ?: "").equals("notify_flutter")) {
+            channel.invokeMethod("notify", arguments) {
+                if (it is Boolean) {
+                    result(it)
+                } else {
+                    result(false)
+                }
+            }
+        } else {
+            channel.sendEvent("__onNotify__", arguments)
+            result(true)
+        }
     }
 
     fun onPop(arguments: Map<String, Any?>?, result: NullableBooleanCallback) {

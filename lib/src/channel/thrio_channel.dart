@@ -23,6 +23,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
+import '../../flutter_thrio.dart';
 import '../navigator/navigator_logger.dart';
 import '../registry/registry_map.dart';
 
@@ -95,7 +96,7 @@ class ThrioChannel {
       };
     return controller.stream;
   }
-
+  static late NativeNotifyCallBack notiveNotiFyCallback ;
   void _setupMethodChannelIfNeeded() {
     if (_methodChannel != null) {
       return;
@@ -104,6 +105,13 @@ class ThrioChannel {
       ..setMethodCallHandler((final call) {
         final handler = _methodHandlers[call.method];
         final args = call.arguments;
+        ThrioLogger.v("===notify===${args.toString()}");
+        if (args is Map&&args["key"]=="notify_flutter") {
+          if(notiveNotiFyCallback!=null){
+            notiveNotiFyCallback.notifyToNotify(args);
+            return Future.value();
+          }
+        }
         if (handler != null) {
           if (args is Map) {
             final arguments = args.cast<String, dynamic>();
@@ -127,6 +135,7 @@ class ThrioChannel {
           .where((final data) => data.containsKey(_kEventNameKey))
           .listen((final data) {
         verbose('Notify on $_channel $data');
+        ThrioLogger.v("===notify===$data");
         final eventName = data.remove(_kEventNameKey);
         final controllers = _eventControllers[eventName];
         if (controllers != null && controllers.isNotEmpty) {
