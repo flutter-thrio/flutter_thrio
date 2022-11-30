@@ -147,6 +147,21 @@ NS_ASSUME_NONNULL_BEGIN
     return isMatch;
 }
 
+- (BOOL)thrio_new_notifyUrl:(NSString *_Nullable)url
+                  index:(NSNumber *_Nullable)index
+                   name:(NSString *)name
+                 params:(id _Nullable)params {
+    BOOL isMatch = NO;
+    
+    NavigatorPageRoute *last = self.thrio_lastRoute;
+    do {
+        [last addNotify:name params:params];
+        [self thrio_onNotify:last];
+    } while ((last = last.prev));
+    
+    return isMatch;
+}
+
 - (void)thrio_popParams:(id _Nullable)params
                animated:(BOOL)animated
                  inRoot:(BOOL)inRoot
@@ -545,6 +560,8 @@ NS_ASSUME_NONNULL_BEGIN
                 @"index": route.settings.index,
                 @"name": name,
                 @"params": serializeParams,
+                @"key": @"notify_flutter",// flutter 发过来的通知
+                @"event_key": params[@"event_key"],//
             } : @{
                 @"url": route.settings.url,
                 @"index": route.settings.index,
@@ -555,7 +572,12 @@ NS_ASSUME_NONNULL_BEGIN
             NavigatorRouteSendChannel *channel =
             [NavigatorFlutterEngineFactory.shared getSendChannelByPageId:pageId
                                                           withEntrypoint:entrypoint];
-            [channel notify:arguments];
+            if([name isEqualToString:@"uikitview_notify"]){
+                [channel notify:arguments];
+            }else{
+                /** 新增自定义方法1*/
+                [channel native_to_flutter_notify:arguments];
+            }
         } else {
             id deserializeParams = [ThrioModule deserializeParams:params];
             if ([self conformsToProtocol:@protocol(NavigatorPageNotifyProtocol)]) {

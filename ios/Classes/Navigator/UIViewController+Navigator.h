@@ -46,6 +46,12 @@ NS_ASSUME_NONNULL_BEGIN
                    name:(NSString *)name
                  params:(id _Nullable)params;
 
+/** 新增自定义方法1*/
+- (BOOL)thrio_new_notifyUrl:(NSString *_Nullable)url
+                      index:(NSNumber *_Nullable)index
+                       name:(NSString *)name
+                     params:(id _Nullable)params;
+
 - (void)thrio_popParams:(id _Nullable)params
                animated:(BOOL)animated
                  inRoot:(BOOL)inRoot

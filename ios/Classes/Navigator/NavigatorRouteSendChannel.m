@@ -65,6 +65,14 @@
     [_channel sendEvent:@"__onNotify__" arguments:arguments];
 }
 
+/** 新增自定义方法1*/
+- (void)native_to_flutter_notify:(id)arguments
+{
+    [_channel invokeMethod:@"flutter_notify" arguments:arguments result:^(id _Nullable value) {
+        //NSLog(@"===>%@",value);
+    }];
+}
+
 - (void)pop:(id)arguments result:(ThrioBoolCallback _Nullable)result {
     [_channel invokeMethod:@"pop" arguments:arguments result:^(id _Nullable r) {
         if (result) {

@@ -35,6 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)notify:(id)arguments;
 
+/** 新增自定义方法1*/
+- (void)native_to_flutter_notify:(id)arguments;
+
 - (void)pop:(id)arguments result:(ThrioBoolCallback _Nullable)result;
 
 - (void)popTo:(id)arguments result:(ThrioBoolCallback _Nullable)result;

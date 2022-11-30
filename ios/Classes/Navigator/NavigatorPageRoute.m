@@ -53,6 +53,9 @@ NS_ASSUME_NONNULL_BEGIN
     } else {
         [_notifications setObject:params forKey:name];
     }
+    
+    // 拦截通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:name object:params];
 }
 
 - (NSDictionary *)removeNotify {
