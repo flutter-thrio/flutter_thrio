@@ -125,6 +125,10 @@ static NSString *const kEventNameKey = @"__event_name__";
     __weak typeof(self) weakself = self;
     [_methodChannel setMethodCallHandler:
      ^(FlutterMethodCall *_Nonnull call, FlutterResult _Nonnull result) {
+        if ([call.arguments[@"key"] isEqualToString:@"notify_native"]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"notify_native" object:call.arguments];
+            return;
+        }
         __strong typeof(weakself) strongSelf = weakself;
         ThrioMethodHandler handler = strongSelf.methodHandlers[call.method];
         if (handler) {
