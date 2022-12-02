@@ -15,14 +15,14 @@ class FlutterThrioPlugin : FlutterPlugin , MethodCallHandler{
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         Log.i(TAG, "onAttachedToEngine")
         val messenger: BinaryMessenger = flutterPluginBinding.binaryMessenger
-        channel = MethodChannel(messenger, "custom_platform_view")
+        channel = MethodChannel(messenger, "com.entysqure.mage")
         channel.setMethodCallHandler(this)
         myFlutterViewFactorr?.let {
             it.setBinaryMessenger(messenger)
             flutterPluginBinding
                 .platformViewRegistry
                 .registerViewFactory(
-                    "plugins.flutter.io/custom_platform_view",it
+                    "come.entysqure.mage",it
                 )
         }
     }
