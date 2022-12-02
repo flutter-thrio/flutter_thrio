@@ -369,3 +369,19 @@
 - feat: onModuleInit change to async method
 - feat: add build method for ThrioNavigator
 - feat: add NavigatorDialogRoute
+
+## 3.1.1
+
+- feat: add thrio_dynamic extension method
+
+## 3.1.2
+
+- feat: export thrio_dynamic
+
+## 3.1.3
+
+- refactor: NavigatorTabBarView and NavigatorPageView
+
+## 3.1.4
+
+- feat:  NavigatorTabBarView, NavigatorPageView support nesting
