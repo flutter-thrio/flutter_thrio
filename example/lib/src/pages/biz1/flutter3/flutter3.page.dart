@@ -42,7 +42,7 @@ class _Flutter3PageState extends State<Flutter3Page> {
           appBar: AppBar(
             backgroundColor: Colors.white,
             title: const Text('thrio_example', style: TextStyle(color: Colors.black)),
-            leading: context.shouldCanPop(const IconButton(
+            leading: context.showPopAwareWidget(const IconButton(
               color: Colors.black,
               tooltip: 'back',
               icon: Icon(Icons.arrow_back_ios),
@@ -85,7 +85,7 @@ class _Flutter3PageState extends State<Flutter3Page> {
                       )),
                 ),
                 InkWell(
-                  onTap: ThrioNavigator.pop,
+                  onTap: () => ThrioNavigator.pop(params: 'goodman'),
                   child: Container(
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.all(8),

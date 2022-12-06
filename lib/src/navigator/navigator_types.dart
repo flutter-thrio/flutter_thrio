@@ -34,7 +34,11 @@ typedef NavigatorRouteBuilder = NavigatorRoute Function(
   RouteSettings settings,
 );
 
-/// Signature of callbacks with generic parameters with type `T`.
+/// Signature of callbacks with int parameter.
+///
+typedef NavigatorIntCallback = void Function(int index);
+
+/// Signature of callbacks with dynamic parameter.
 ///
 typedef NavigatorParamsCallback = void Function(dynamic params);
 
@@ -47,9 +51,9 @@ enum NavigatorRoutePushHandleType {
   prevention, // Prevent routing behavior from continuing
 }
 
-/// Signature of route push handler callbacks with RouteSettings.
+/// Signature of route push handler with RouteSettings.
 ///
-typedef NavigatorRoutePushCallback = Future<NavigatorRoutePushHandleType> Function(
+typedef NavigatorRoutePushHandle = Future<NavigatorRoutePushHandleType> Function(
   RouteSettings settings, {
   bool animated,
 });

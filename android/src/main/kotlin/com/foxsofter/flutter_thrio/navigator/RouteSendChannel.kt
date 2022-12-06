@@ -24,7 +24,6 @@
 package com.foxsofter.flutter_thrio.navigator
 
 import com.foxsofter.flutter_thrio.BooleanCallback
-import com.foxsofter.flutter_thrio.NullableBooleanCallback
 import com.foxsofter.flutter_thrio.channel.ThrioChannel
 
 internal class RouteSendChannel constructor(internal val channel: ThrioChannel) {
@@ -51,13 +50,9 @@ internal class RouteSendChannel constructor(internal val channel: ThrioChannel) 
         }
     }
 
-    fun onPop(arguments: Map<String, Any?>?, result: NullableBooleanCallback) {
+    fun onPop(arguments: Map<String, Any?>?, result: BooleanCallback) {
         channel.invokeMethod("pop", arguments) {
-            if (it is Boolean) {
-                result(it)
-            } else {
-                result(null)
-            }
+            result(it == true)
         }
     }
 
@@ -75,6 +70,12 @@ internal class RouteSendChannel constructor(internal val channel: ThrioChannel) 
 
     fun onReplace(arguments: Map<String, Any?>?, result: BooleanCallback) {
         channel.invokeMethod("replace", arguments) {
+            result(it == true)
+        }
+    }
+
+    fun onCanPop(arguments: Map<String, Any?>?, result: BooleanCallback) {
+        channel.invokeMethod("canPop", arguments) {
             result(it == true)
         }
     }
