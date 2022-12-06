@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                         child: AppBar(
                           backgroundColor: Colors.blue,
                           title: const Text('thrio_example', style: TextStyle(color: Colors.black)),
-                          leading: context.shouldCanPop(const IconButton(
+                          leading: context.showPopAwareWidget(const IconButton(
                             color: Colors.black,
                             tooltip: 'back',
                             icon: Icon(Icons.arrow_back_ios),
@@ -116,11 +116,12 @@ class _HomePageState extends State<HomePage> {
                                 )),
                           ),
                           InkWell(
-                            onTap: () => root.biz1.flutter1.push(
-                              params: People(name: 'foxsofter', age: 100, sex: '男性'),
-                              poppedResult: (final params) =>
-                                  ThrioLogger.v('/biz1/flutter1 popped:$params'),
-                            ),
+                            onTap: () async {
+                              final params = await root.biz1.flutter1.home.push(
+                                params: People(name: 'foxsofter', age: 100, sex: '男性'),
+                              );
+                              ThrioLogger.v('/biz1/flutter1 popped:$params');
+                            },
                             child: Container(
                                 padding: const EdgeInsets.all(8),
                                 margin: const EdgeInsets.all(8),
@@ -142,12 +143,13 @@ class _HomePageState extends State<HomePage> {
                                 )),
                           ),
                           InkWell(
-                            onTap: () => root.biz2.flutter2.push(
-                              params: People(name: '大宝剑', age: 0, sex: 'x'),
-                              poppedResult: (final params) => ThrioLogger.v(
-                                '${root.biz2.flutter2.url} poppedResult call popped:$params',
-                              ),
-                            ),
+                            onTap: () async {
+                              final params = await root.biz2.flutter2.push(
+                                params: People(name: '大宝剑', age: 0, sex: 'x'),
+                              );
+                              ThrioLogger.v(
+                                  '${root.biz2.flutter2.url} poppedResult call popped:$params');
+                            },
                             child: Container(
                                 padding: const EdgeInsets.all(8),
                                 margin: const EdgeInsets.all(8),
@@ -170,12 +172,13 @@ class _HomePageState extends State<HomePage> {
                                 )),
                           ),
                           InkWell(
-                            onTap: () => ThrioNavigator.push(
-                              url: '/biz1/native1',
-                              params: People(name: '大宝剑', age: 10, sex: 'x'),
-                              poppedResult: (final params) =>
-                                  ThrioLogger.v('/biz1/native1 poppedResult call params:$params'),
-                            ),
+                            onTap: () async {
+                              final params = await ThrioNavigator.push(
+                                url: '/biz1/native1',
+                                params: People(name: '大宝剑', age: 10, sex: 'x'),
+                              );
+                              ThrioLogger.v('/biz1/native1 poppedResult call params:$params');
+                            },
                             child: Container(
                                 padding: const EdgeInsets.all(8),
                                 margin: const EdgeInsets.all(8),
@@ -224,6 +227,20 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.grey,
                                 child: const Text(
                                   'replace flutter2',
+                                  style: TextStyle(fontSize: 22, color: Colors.black),
+                                )),
+                          ),
+                          InkWell(
+                            onTap: () async {
+                              final canPop = await ThrioNavigator.canPop();
+                              debugPrint('canPop: $canPop');
+                            },
+                            child: Container(
+                                padding: const EdgeInsets.all(8),
+                                margin: const EdgeInsets.all(8),
+                                color: Colors.grey,
+                                child: const Text(
+                                  'canPop',
                                   style: TextStyle(fontSize: 22, color: Colors.black),
                                 )),
                           ),

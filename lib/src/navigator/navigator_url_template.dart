@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2020 foxsofter
+// Copyright (c) 2022 foxsofter
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
@@ -19,24 +19,32 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-import '../navigator/navigator_types.dart';
+import 'package:flutter/material.dart';
+import 'package:uri/uri.dart';
 
-/// Signature of callbacks for json serializer.
-///
-typedef JsonSerializer = Map<String, dynamic> Function(T Function<T>() factory);
+@immutable
+class NavigatorUrlTemplate {
+  const NavigatorUrlTemplate({
+    required this.scheme,
+    required this.host,
+    required this.parser,
+  });
 
-/// Signature of callbacks for json deserializer.
-///
-typedef JsonDeserializer<T> = T? Function(Map<String, dynamic> params);
+  final String scheme;
+  final String host;
+  final UriParser parser;
 
-/// Signature of route custom handler.
-///
-/// Can be used to handle deeplink or route redirection.
-///
-typedef NavigatorRouteCustomHandler = Future<TPopParams> Function<TPopParams>(
-  String url,
-  Map<String, List<String>> queryParams, {
-  dynamic params,
-  bool animated,
-  NavigatorIntCallback? result,
-});
+  @override
+  bool operator ==(final Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    return other is NavigatorUrlTemplate &&
+        scheme == other.scheme &&
+        host == other.host &&
+        parser.template == other.parser.template;
+  }
+
+  @override
+  int get hashCode => Object.hash(scheme, host, parser.template);
+}

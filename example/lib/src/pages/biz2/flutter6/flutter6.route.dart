@@ -5,15 +5,17 @@
 
 import 'package:flutter_thrio/flutter_thrio.dart';
 
-class Flutter2Route extends NavigatorRouteLeaf {
-  factory Flutter2Route(final NavigatorRouteNode parent) => _instance ??= Flutter2Route._(parent);
+import '../../types/people.dart';
 
-  Flutter2Route._(super.parent);
+class Flutter6Route extends NavigatorRouteLeaf {
+  factory Flutter6Route(final NavigatorRouteNode parent) => _instance ??= Flutter6Route._(parent);
 
-  static Flutter2Route? _instance;
+  Flutter6Route._(super.parent);
+
+  static Flutter6Route? _instance;
 
   @override
-  String get name => 'flutter2';
+  String get name => 'flutter6';
 
   Future<TPopParams> push<TParams, TPopParams>({
     final TParams? params,

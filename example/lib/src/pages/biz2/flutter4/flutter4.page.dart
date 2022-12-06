@@ -36,7 +36,7 @@ class _Flutter4PageState extends State<Flutter4Page> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: const Text('thrio_example', style: TextStyle(color: Colors.black)),
-        leading: context.shouldCanPop(const IconButton(
+        leading: context.showPopAwareWidget(const IconButton(
           color: Colors.black,
           tooltip: 'back',
           icon: Icon(Icons.arrow_back_ios),
@@ -57,7 +57,7 @@ class _Flutter4PageState extends State<Flutter4Page> {
               ),
             ),
             InkWell(
-              onTap: () => root.biz1.flutter1.push(params: {
+              onTap: () => root.biz1.flutter1.home.push(params: {
                 '1': {'2': '3'}
               }),
               child: Container(

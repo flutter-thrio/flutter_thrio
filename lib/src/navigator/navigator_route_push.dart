@@ -33,7 +33,7 @@ class NavigatorRoutePush extends StatefulWidget {
   });
 
   final String url;
-  final NavigatorRoutePushCallback onPush;
+  final NavigatorRoutePushHandle onPush;
   final Widget child;
 
   @override

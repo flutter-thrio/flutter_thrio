@@ -35,6 +35,7 @@ class NavigatorRouteReceiveChannel {
     _onPopTo();
     _onRemove();
     _onReplace();
+    _onCanPop();
   }
 
   final ThrioChannel _channel;
@@ -50,7 +51,7 @@ class NavigatorRouteReceiveChannel {
         );
         routeSettings.params = _deserializeParams(routeSettings.url!, routeSettings.params);
         final animated = arguments?['animated'] == true;
-        final callback = anchor.get<NavigatorRoutePushCallback>(url: routeSettings.url!);
+        final callback = anchor.get<NavigatorRoutePushHandle>(url: routeSettings.url!);
         if (callback != null) {
           final result = await callback(routeSettings, animated: animated);
           if (result == NavigatorRoutePushHandleType.prevention) {
@@ -82,6 +83,18 @@ class NavigatorRouteReceiveChannel {
               _syncPagePoppedResults();
               return value;
             }) ??
+            false;
+      });
+
+  void _onCanPop() => _channel.registryMethodCall('canPop', ([final arguments]) async {
+        final routeSettings = NavigatorRouteSettings.fromArguments(arguments);
+        if (routeSettings == null) {
+          return false;
+        }
+        final inRoot = arguments?['inRoot'] == true;
+        return ThrioNavigatorImplement.shared()
+                .navigatorState
+                ?.canPop(routeSettings, inRoot: inRoot) ??
             false;
       });
 
@@ -181,9 +194,14 @@ class NavigatorRouteReceiveChannel {
     final routes = await ThrioNavigatorImplement.shared().allRoutes();
     if (routes.isEmpty) {
       ThrioNavigatorImplement.shared().poppedResults.clear();
+    } else {
+      ThrioNavigatorImplement.shared().poppedResults.removeWhere((final name, final poppedResult) {
+        if (!routes.any((final it) => it.name == name)) {
+          Future(() => poppedResult.call(null));
+          return true;
+        }
+        return false;
+      });
     }
-    ThrioNavigatorImplement.shared()
-        .poppedResults
-        .removeWhere((final name, final _) => !routes.any((final it) => it.name == name));
   }
 }

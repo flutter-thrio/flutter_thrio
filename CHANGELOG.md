@@ -385,3 +385,24 @@
 ## 3.1.4
 
 - feat:  NavigatorTabBarView, NavigatorPageView support nesting
+
+## 3.1.5
+
+- feat:  flutter support canPop
+
+## 3.2.0
+
+- feat: The return value of the push method is changed to be consistent with Flutter's push method
+
+## 3.3.0
+
+- feat: add ModuleRouteCustomHandler
+
+## 3.4.0
+
+- feat: custom route handle with params
+- refactor: rename shouldCanPop to showPopAwareWidget
+  
+## 3.4.1
+
+- refactor: Reduce the parameters of ModuleRouteCustomHandler

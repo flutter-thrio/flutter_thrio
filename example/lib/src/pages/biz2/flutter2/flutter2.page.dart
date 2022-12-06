@@ -48,7 +48,7 @@ class _Flutter2PageState extends State<Flutter2Page> {
           appBar: AppBar(
             backgroundColor: Colors.white,
             title: const Text('thrio_example', style: TextStyle(color: Colors.black)),
-            leading: context.shouldCanPop(const IconButton(
+            leading: context.showPopAwareWidget(const IconButton(
               color: Colors.black,
               tooltip: 'back',
               icon: Icon(Icons.arrow_back_ios),
@@ -107,13 +107,12 @@ class _Flutter2PageState extends State<Flutter2Page> {
                       )),
                 ),
                 InkWell(
-                  onTap: () => ThrioNavigator.push(
-                      url: '/biz2/native2',
-                      params: {
-                        '1': {'2': '3'}
-                      },
-                      poppedResult: (final params) =>
-                          ThrioLogger.v('/biz1/native1 popped:$params')),
+                  onTap: () async {
+                    final params = await ThrioNavigator.push(url: '/biz2/native2', params: {
+                      '1': {'2': '3'}
+                    });
+                    ThrioLogger.v('/biz1/native1 popped:$params');
+                  },
                   child: Container(
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.all(8),
@@ -202,6 +201,17 @@ class _Flutter2PageState extends State<Flutter2Page> {
                       color: Colors.grey,
                       child: const Text(
                         'push flutter5',
+                        style: TextStyle(fontSize: 22, color: Colors.black),
+                      )),
+                ),
+                InkWell(
+                  onTap: root.biz2.flutter6.push,
+                  child: Container(
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(8),
+                      color: Colors.grey,
+                      child: const Text(
+                        'push flutter6',
                         style: TextStyle(fontSize: 22, color: Colors.black),
                       )),
                 ),

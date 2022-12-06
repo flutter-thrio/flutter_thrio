@@ -19,6 +19,8 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -102,6 +104,21 @@ class NavigatorWidgetState extends State<NavigatorWidget> {
     return true;
   }
 
+  Future<bool> canPop(final RouteSettings settings, {final bool inRoot = false}) async {
+    final navigatorState = widget.child.tryStateOf<NavigatorState>();
+    if (navigatorState == null) {
+      return false;
+    }
+    if (await history.last.willPop() != RoutePopDisposition.pop) {
+      return false;
+    }
+    // 在原生端处于容器的根部，且当前 Flutter 页面栈上不超过 3，则不能再 pop
+    if (inRoot && history.whereType<NavigatorRoute>().length < 3) {
+      return false;
+    }
+    return true;
+  }
+
   Future<bool> maybePop(
     final RouteSettings settings, {
     final bool animated = true,
@@ -114,11 +131,10 @@ class NavigatorWidgetState extends State<NavigatorWidget> {
     if (settings.name != history.last.settings.name) {
       final poppedResults = ThrioNavigatorImplement.shared().poppedResults;
       if (poppedResults.containsKey(settings.name)) {
-        // 不匹配的时候，调用 poppedResult 回调
+        // 不匹配的时候表示这里是非当前引擎触发的，调用 poppedResult 回调
         final poppedResult = poppedResults.remove(settings.name);
-        if (poppedResult != null) {
-          _poppedResultCallback(poppedResult, settings.url!, settings.params);
-        }
+        _poppedResultCallback(poppedResult, settings.url!, settings.params);
+
         return false;
       }
     }
@@ -138,12 +154,14 @@ class NavigatorWidgetState extends State<NavigatorWidget> {
       return false;
     }
 
-    // 处理经过 Navigator 入栈的匿名 Route
-    if (settings.name == null) {
-      return navigatorState.maybePop().then((final _) => false);
+    // 关闭非体系内的顶部 route，同时 return false，避免原生端清栈
+    if (history.last is! NavigatorRoute) {
+      unawaited(navigatorState.maybePop(settings.params).then((final _) => history.removeLast()));
+      return false;
     }
 
     // 不管成功与否都 return false，避免原生端清栈
+    // 理论上不可能出现这种情况
     if (settings.name != history.last.settings.name) {
       return false;
     }
@@ -329,8 +347,11 @@ class NavigatorWidgetState extends State<NavigatorWidget> {
   @override
   Widget build(final BuildContext context) => widget.child;
 
-  void _poppedResultCallback(final NavigatorParamsCallback? poppedResultCallback, final String? url,
-      final dynamic params) {
+  void _poppedResultCallback(
+    final NavigatorParamsCallback? poppedResultCallback,
+    final String? url,
+    final dynamic params,
+  ) {
     if (poppedResultCallback == null) {
       return;
     }
