@@ -25,6 +25,7 @@ package com.foxsofter.flutter_thrio.navigator
 
 import android.app.Activity
 import com.foxsofter.flutter_thrio.BooleanCallback
+import com.foxsofter.flutter_thrio.IntCallback
 import com.foxsofter.flutter_thrio.NullableIntCallback
 import com.foxsofter.flutter_thrio.module.ModuleJsonDeserializers
 import com.foxsofter.flutter_thrio.module.ModuleJsonSerializers
@@ -106,6 +107,36 @@ internal data class PageRouteHolder(
             }
         }
         result(isMatch)
+    }
+
+    fun <T> maybePop(
+        params: T?,
+        animated: Boolean,
+        inRoot: Boolean = false,
+        result: IntCallback
+    ) {
+        val lastRoute = lastRoute()
+        if (lastRoute == null) {
+            result(0)
+            return
+        }
+        val activity = activity?.get()
+        if (activity != null && !activity.isDestroyed) {
+            if (activity is ThrioFlutterActivity) {
+                lastRoute.settings.params = ModuleJsonSerializers.serializeParams(params)
+                lastRoute.settings.animated = animated
+                var arguments = lastRoute.settings.toArguments()
+                arguments = mutableMapOf<String, Any?>().also { args ->
+                    args.putAll(arguments)
+                    args["inRoot"] = inRoot
+                }
+                activity.onMaybePop(arguments, result)
+            } else {
+                result(1)
+            }
+        } else {
+            result(0)
+        }
     }
 
     fun <T> pop(
@@ -245,29 +276,25 @@ internal data class PageRouteHolder(
         index: Int?,
         newUrl: String,
         newIndex: Int,
-        replaceOnly: Boolean,
         result: NullableIntCallback
     ) {
-        val route = lastRoute(url, index)
+        val oldRoute = lastRoute(url, index)
         val lastRoute = PageRoutes.lastRoute(newUrl)
         // 现阶段只实现 Flutter 页面之间的 replace 操作
-        if (route != null && ThrioFlutterActivity::class.java.isAssignableFrom(route.clazz) &&
+        if (oldRoute != null && ThrioFlutterActivity::class.java.isAssignableFrom(oldRoute.clazz) &&
             (lastRoute == null || ThrioFlutterActivity::class.java.isAssignableFrom(lastRoute.clazz))
         ) {
             val activity = activity?.get()
             if (activity != null && activity is ThrioFlutterActivity) {
-                val args = mutableMapOf<String, Any?>(
-                    "replaceOnly" to replaceOnly
-                )
-                args.putAll(route.settings.toArgumentsWith(newUrl, newIndex))
+                val args = oldRoute.settings.toArgumentsWith(newUrl, newIndex)
                 activity.onReplace(args) {
                     if (it) {
                         val newRouteSettings = RouteSettings(newUrl, newIndex)
-                        newRouteSettings.isNested = route.settings.isNested
-                        route.settings = newRouteSettings
-                        route.settings.params = null
+                        newRouteSettings.isNested = oldRoute.settings.isNested
+                        oldRoute.settings = newRouteSettings
+                        oldRoute.settings.params = null
                         // 清除通知
-                        route.removeNotify()
+                        oldRoute.removeNotify()
                         // 更新 intent 避免引起数据错误
                         val settingData = hashMapOf<String, Any?>().also { map ->
                             map.putAll(newRouteSettings.toArguments())

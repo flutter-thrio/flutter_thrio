@@ -51,6 +51,11 @@ NS_ASSUME_NONNULL_BEGIN
                       index:(NSNumber *_Nullable)index
                        name:(NSString *)name
                      params:(id _Nullable)params;
+                     
+- (void)thrio_maybePopParams:(id _Nullable)params
+                    animated:(BOOL)animated
+                      inRoot:(BOOL)inRoot
+                      result:(ThrioNumberCallback _Nullable)result;
 
 - (void)thrio_popParams:(id _Nullable)params
                animated:(BOOL)animated
@@ -69,10 +74,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)thrio_replaceUrl:(NSString *)url
                    index:(NSNumber *_Nullable)index
-              withNewUrl:(NSString *)newUrl
-                newIndex:(NSNumber *_Nullable)newIndex
-                  result:(ThrioBoolCallback _Nullable)result
-             replaceOnly:(BOOL)replaceOnly;
+                  newUrl:(NSString *)newUrl
+                newIndex:(NSNumber *)newIndex
+                  result:(ThrioBoolCallback _Nullable)result;
 
 - (void)thrio_canPopInRoot:(BOOL)inRoot result:(ThrioBoolCallback _Nullable)result;
 

@@ -50,6 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
         [self _onReady];
         [self _onPush];
         [self _onNotify];
+        [self _onMaybePop];
         [self _onPop];
         [self _onPopTo];
         [self _onRemove];
@@ -169,6 +170,25 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
+- (void)_onMaybePop {
+    [_channel registryMethod:@"maybePop"
+                     handler:
+     ^void (NSDictionary<NSString *, id> *arguments,
+            ThrioIdCallback _Nullable result) {
+        id params = [arguments[@"params"] isKindOfClass:NSNull.class] ? nil : arguments[@"params"];
+        BOOL animated = [arguments[@"animated"] boolValue];
+        NavigatorVerbose(@"on maybePop");
+        [ThrioNavigator _maybePopParams:params
+                               animated:animated
+                                 result:^(BOOL r) {
+            if (result) {
+                result(@(r));
+            }
+        }];
+    }];
+}
+
+
 - (void)_onPopTo {
     [_channel registryMethod:@"popTo"
                      handler:
@@ -236,18 +256,17 @@ NS_ASSUME_NONNULL_BEGIN
         ? nil
         : arguments[@"index"];
         NSString *newUrl = arguments[@"newUrl"];
-        BOOL replaceOnly = [arguments[@"replaceOnly"] boolValue];
         
-        NavigatorVerbose(@"on replace: %@.%@ => %@", oldUrl, oldIndex, newUrl);
+        NavigatorVerbose(@"on replace: %@ %@ => %@", index, url, newUrl);
         
         [ThrioNavigator _replaceUrl:url
                               index:index
-                         withNewUrl:newUrl
+                             newUrl:newUrl
                              result:^(NSNumber *r) {
             if (result) {
                 result(r);
             }
-        } replaceOnly:replaceOnly];
+        }];
     }];
 }
 

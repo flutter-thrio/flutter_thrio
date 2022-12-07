@@ -63,6 +63,24 @@ abstract class ThrioNavigator {
         result: result,
       );
 
+  /// Push the page onto the navigation stack, and remove the top page.
+  ///
+  /// If a native page builder exists for the `url`, open the native page,
+  /// otherwise open the flutter page.
+  ///
+  static Future<TPopParams> pushReplace<TParams, TPopParams>({
+    required final String url,
+    final TParams? params,
+    final bool animated = true,
+    final NavigatorIntCallback? result,
+  }) =>
+      ThrioNavigatorImplement.shared().pushReplace<TParams, TPopParams>(
+        url: url,
+        params: params,
+        animated: animated,
+        result: result,
+      );
+
   /// Send a notification to the page.
   ///
   /// Notifications will be triggered when the page enters the foreground.
@@ -81,6 +99,17 @@ abstract class ThrioNavigator {
         params: params,
       );
 
+  /// Maybe pop a page from the navigation stack.
+  ///
+  static Future<bool> maybePop<TParams>({
+    final TParams? params,
+    final bool animated = true,
+  }) =>
+      ThrioNavigatorImplement.shared().maybePop<TParams>(
+        params: params,
+        animated: animated,
+      );
+
   /// Pop a page from the navigation stack.
   ///
   static Future<bool> pop<TParams>({
@@ -89,6 +118,17 @@ abstract class ThrioNavigator {
   }) =>
       ThrioNavigatorImplement.shared().pop<TParams>(
         params: params,
+        animated: animated,
+      );
+
+  /// Pop the page in the navigation stack until the first page.
+  ///
+  static Future<bool> popToRoot({
+    final int index = 0,
+    final bool animated = true,
+  }) =>
+      ThrioNavigatorImplement.shared().popToRoot(
+        index: index,
         animated: animated,
       );
 

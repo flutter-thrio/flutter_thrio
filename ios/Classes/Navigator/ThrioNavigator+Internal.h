@@ -46,6 +46,10 @@ NS_ASSUME_NONNULL_BEGIN
             params:(id _Nullable)params
             result:(ThrioBoolCallback _Nullable)result;
 
++ (void)_maybePopParams:(id _Nullable)params
+               animated:(BOOL)animated
+                 result:(ThrioBoolCallback _Nullable)result;
+
 + (void)_popParams:(id _Nullable)params
           animated:(BOOL)animated
             result:(ThrioBoolCallback _Nullable)result;
@@ -62,9 +66,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void)_replaceUrl:(NSString *)url
               index:(NSNumber *_Nullable)index
-         withNewUrl:(NSString *)newUrl
-             result:(ThrioNumberCallback _Nullable)result
-        replaceOnly:(BOOL)replaceOnly;
+             newUrl:(NSString *)newUrl
+             result:(ThrioNumberCallback _Nullable)result;
 
 + (void)_canPop:(ThrioBoolCallback _Nullable)result;
 

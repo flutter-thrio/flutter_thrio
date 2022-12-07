@@ -26,6 +26,7 @@ import 'package:flutter/widgets.dart';
 import 'package:uri/uri.dart';
 
 import '../channel/thrio_channel.dart';
+import '../exception/thrio_exception.dart';
 import '../extension/thrio_iterable.dart';
 import '../module/module_anchor.dart';
 import '../module/module_types.dart';
@@ -204,6 +205,50 @@ class ThrioNavigatorImplement {
     return completer.future;
   }
 
+  Future<TPopParams> pushReplace<TParams, TPopParams>({
+    required final String url,
+    final TParams? params,
+    final bool animated = true,
+    final NavigatorIntCallback? result,
+  }) async {
+    final lastSetting = await lastRoute();
+    if (lastSetting == null) {
+      throw ThrioException('no route to replace');
+    }
+    final match = matchRouteCustomHandle(url);
+    if (match != null) {
+      final poppedResult = await onRouteCustomHandle<TPopParams>(
+        handler: match.value,
+        uri: match.key,
+        params: params,
+        animated: animated,
+        result: result,
+      );
+      await remove(url: lastSetting.url!, index: lastSetting.index);
+      return poppedResult;
+    }
+
+    final completer = Completer<TPopParams>();
+    unawaited(_sendChannel
+        .push<TParams>(url: url, params: params, animated: animated)
+        .then((final index) async {
+      if (index > 0) {
+        final routeName = '$index $url';
+        final routeHistory = ThrioNavigatorImplement.shared().navigatorState?.history;
+        final route = routeHistory?.lastWhereOrNull((final it) => it.settings.name == routeName);
+        if (route != null && route is NavigatorRoute) {
+          route.poppedResult = (final params) => poppedResult<TPopParams>(completer, params);
+        } else {
+          // 不在当前页面栈上，则通过name来缓存
+          poppedResults[routeName] = (final params) => poppedResult<TPopParams>(completer, params);
+        }
+        await remove(url: lastSetting.url!, index: lastSetting.index);
+      }
+      result?.call(index);
+    }));
+    return completer.future;
+  }
+
   void poppedResult<TPopParams>(final Completer<TPopParams> completer, final dynamic params) {
     if (completer.isCompleted) {
       return;
@@ -230,11 +275,28 @@ class ThrioNavigatorImplement {
   }) =>
       _sendChannel.notify<TParams>(name: name, url: url, index: index, params: params);
 
+  Future<bool> maybePop<TParams>({
+    final TParams? params,
+    final bool animated = true,
+  }) =>
+      _sendChannel.maybePop<TParams>(params: params, animated: animated);
+
   Future<bool> pop<TParams>({
     final TParams? params,
     final bool animated = true,
   }) =>
       _sendChannel.pop<TParams>(params: params, animated: animated);
+
+  Future<bool> popToRoot({
+    final int index = 0,
+    final bool animated = true,
+  }) async {
+    final rootRoute = await firstRoute();
+    if (rootRoute == null) {
+      return false;
+    }
+    return _sendChannel.popTo(url: rootRoute.url!, index: rootRoute.index, animated: animated);
+  }
 
   Future<bool> popTo({
     required final String url,
@@ -270,9 +332,8 @@ class ThrioNavigatorImplement {
     required final String url,
     final int index = 0,
     required final String newUrl,
-    final bool replaceOnly = false,
   }) =>
-      _sendChannel.replace(url: url, index: index, newUrl: newUrl, replaceOnly: replaceOnly);
+      _sendChannel.replace(url: url, index: index, newUrl: newUrl);
 
   Future<bool> canPop() => _sendChannel.canPop();
 
@@ -286,6 +347,11 @@ class ThrioNavigatorImplement {
 
   Future<bool> isInitialRoute({required final String url, final int index = 0}) =>
       _sendChannel.isInitialRoute(url: url, index: index);
+
+  Future<RouteSettings?> firstRoute({final String? url}) async {
+    final all = await allRoutes(url: url);
+    return all.firstOrNull;
+  }
 
   Future<RouteSettings?> lastRoute({final String? url}) => _sendChannel.lastRoute(url: url);
 

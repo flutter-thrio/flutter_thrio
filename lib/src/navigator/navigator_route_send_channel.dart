@@ -74,6 +74,16 @@ class NavigatorRouteSendChannel {
     return _channel.invokeMethod<bool>('pop', arguments).then((final it) => it ?? false);
   }
 
+  Future<bool> maybePop<TParams>({final TParams? params, final bool animated = true}) async {
+    final settings = await lastRoute();
+    final url = settings?.url;
+    final arguments = <String, dynamic>{
+      'params': _serializeParams<TParams>(url: url, params: params),
+      'animated': animated,
+    };
+    return _channel.invokeMethod<bool>('maybePop', arguments).then((final it) => it ?? false);
+  }
+
   Future<bool> isInitialRoute({required final String url, final int index = 0}) {
     final arguments = <String, dynamic>{'url': url, 'index': index};
     return _channel.invokeMethod<bool>('isInitialRoute', arguments).then((final it) => it ?? false);
@@ -95,15 +105,13 @@ class NavigatorRouteSendChannel {
 
   Future<int> replace({
     required final String url,
-    final int? index,
+    final int index = 0,
     required final String newUrl,
-    final bool replaceOnly = false,
   }) {
     final arguments = <String, dynamic>{
       'url': url,
       'index': index,
       'newUrl': newUrl,
-      'replaceOnly': replaceOnly,
     };
     return _channel.invokeMethod<int>('replace', arguments).then((final it) => it ?? 0);
   }

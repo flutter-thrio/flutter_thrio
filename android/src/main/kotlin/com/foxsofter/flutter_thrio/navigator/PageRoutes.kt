@@ -27,6 +27,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import com.foxsofter.flutter_thrio.BooleanCallback
+import com.foxsofter.flutter_thrio.IntCallback
 import com.foxsofter.flutter_thrio.NullableIntCallback
 import com.foxsofter.flutter_thrio.extension.getEntrypoint
 import com.foxsofter.flutter_thrio.extension.getPageId
@@ -145,6 +146,25 @@ internal object PageRoutes : Application.ActivityLifecycleCallbacks {
         result(isMatch)
     }
 
+    fun <T> maybePop(
+        params: T?,
+        animated: Boolean,
+        inRoot: Boolean = false,
+        result: IntCallback
+    ) {
+        val holder = routeHolders.lastOrNull()
+        if (holder == null) {
+            result(0)
+            return
+        }
+
+        if (holder.routes.isEmpty()) { // 原生 Activity
+            result(1)
+        } else {
+            holder.maybePop<T>(params, animated, inRoot, result)
+        }
+    }
+
     fun <T> pop(
         params: T?,
         animated: Boolean,
@@ -260,14 +280,14 @@ internal object PageRoutes : Application.ActivityLifecycleCallbacks {
         }
     }
 
-    fun replace(url: String, index: Int?, newUrl: String, newIndex: Int, replaceOnly: Boolean, result: NullableIntCallback) {
+    fun replace(url: String, index: Int?, newUrl: String, newIndex: Int, result: NullableIntCallback) {
         val holder = routeHolders.lastOrNull { it.lastRoute(url, index) != null }
         if (holder == null) {
             result(null)
             return
         }
 
-        holder.replace(url, index, newUrl, newIndex, replaceOnly, result)
+        holder.replace(url, index, newUrl, newIndex, result)
     }
 
     fun didPop(routeSettings: RouteSettings) {
