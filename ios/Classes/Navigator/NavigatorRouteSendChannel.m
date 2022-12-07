@@ -69,7 +69,7 @@
 - (void)native_to_flutter_notify:(id)arguments
 {
     [_channel invokeMethod:@"flutter_notify" arguments:arguments result:^(id _Nullable value) {
-        
+
 - (void)maybePop:(id)arguments result:(ThrioNumberCallback _Nullable)result {
     [_channel invokeMethod:@"maybePop" arguments:arguments result:^(id _Nullable r) {
         if (result) {

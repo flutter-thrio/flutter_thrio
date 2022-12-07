@@ -152,15 +152,15 @@ NS_ASSUME_NONNULL_BEGIN
                    name:(NSString *)name
                  params:(id _Nullable)params {
     BOOL isMatch = NO;
-    
+
     NavigatorPageRoute *last = self.thrio_lastRoute;
     do {
         [last addNotify:name params:params];
         [self thrio_onNotify:last];
     } while ((last = last.prev));
-    
+
     return isMatch;
-    
+
 - (void)thrio_maybePopParams:(id _Nullable)params
                     animated:(BOOL)animated
                       inRoot:(BOOL)inRoot
@@ -178,7 +178,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                    toArgumentsWithParams:serializeParams]];
     [arguments setObject:[NSNumber numberWithBool:animated] forKey:@"animated"];
     [arguments setObject:[NSNumber numberWithBool:inRoot] forKey:@"inRoot"];
-    
+
     if ([self isKindOfClass:NavigatorFlutterViewController.class]) {
         NSString *entrypoint = [(NavigatorFlutterViewController *)self entrypoint];
         NSUInteger pageId = [(NavigatorFlutterViewController *)self pageId];

@@ -58,6 +58,13 @@ internal class RouteSendChannel constructor(internal val channel: ThrioChannel) 
         }
     }
 
+    fun onMaybePop(arguments: Map<String, Any?>?, result: IntCallback) {
+        channel.invokeMethod("maybePop", arguments) {
+            val r = if (it != null) it as Int else 0
+            result(r)
+        }
+    }
+
     fun onPop(arguments: Map<String, Any?>?, result: BooleanCallback) {
         channel.invokeMethod("pop", arguments) {
             result(it == true)

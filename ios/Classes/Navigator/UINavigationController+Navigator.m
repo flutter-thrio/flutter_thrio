@@ -150,12 +150,12 @@ NS_ASSUME_NONNULL_BEGIN
                    name:(NSString *)name
                  params:(id _Nullable)params {
     BOOL isMatch = NO;
-    
+
     NSArray *vcs = self.viewControllers;
     for (UIViewController *vc in vcs) {
         [vc thrio_new_notifyUrl:url index:index name:name params:params];
     }
-    
+
     return isMatch;
 }
 
@@ -208,6 +208,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }];
 }
+
 
 - (void)thrio_popParams:(id _Nullable)params
                animated:(BOOL)animated
