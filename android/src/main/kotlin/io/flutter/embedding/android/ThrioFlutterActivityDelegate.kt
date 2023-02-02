@@ -29,13 +29,17 @@ import com.foxsofter.flutter_thrio.BooleanCallback
 import com.foxsofter.flutter_thrio.IntCallback
 import com.foxsofter.flutter_thrio.extension.getEntrypoint
 import com.foxsofter.flutter_thrio.extension.getPageId
-import com.foxsofter.flutter_thrio.navigator.FlutterEngineFactory
+import com.foxsofter.flutter_thrio.navigator.*
+import com.foxsofter.flutter_thrio.navigator.Log
 import com.foxsofter.flutter_thrio.navigator.NAVIGATION_ROUTE_PAGE_ID_NONE
 import com.foxsofter.flutter_thrio.navigator.PageRoutes
-import com.foxsofter.flutter_thrio.navigator.ThrioNavigator
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.BinaryMessenger
+import io.flutter.plugin.common.MethodChannel
 
 open class ThrioFlutterActivityDelegate(val activity: Activity) : ThrioFlutterActivityBase {
+    var disableBackButtonPressed = false;
+
     override val engine: com.foxsofter.flutter_thrio.navigator.FlutterEngine?
         get() {
             val pageId = activity.intent.getPageId()
@@ -44,16 +48,36 @@ open class ThrioFlutterActivityDelegate(val activity: Activity) : ThrioFlutterAc
         }
 
     override fun provideFlutterEngine(context: Context): FlutterEngine? {
-        return FlutterEngineFactory.provideEngine(activity)
+        return FlutterEngineFactory.provideEngine(activity).also {
+            setupBackPressedMethodChannel(it.dartExecutor.binaryMessenger)
+        }
+    }
+
+    private fun setupBackPressedMethodChannel(binaryMessenger: BinaryMessenger) {
+        MethodChannel(binaryMessenger, "com.foxsofter.flutter_thrio/backbutton")
+            .setMethodCallHandler { call, result ->
+                if (call.method == "disable") {
+                    disableBackButtonPressed = true
+                } else if (call.method == "enable") {
+                    disableBackButtonPressed = false
+                }
+                result.success(true)
+            }
     }
 
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
         FlutterEngineFactory.cleanUpFlutterEngine(activity)
     }
 
-    var lastClickTime = System.currentTimeMillis()
+    private var lastClickTime = System.currentTimeMillis()
 
     override fun onBackPressed() {
+        if (disableBackButtonPressed) {
+            Log.i("ThrioFlutterActiviyDelate", "onBackPressed ignored")
+            return
+        }
+
+
         val now = System.currentTimeMillis()
         if (now - lastClickTime <= 400) {
             return
@@ -63,9 +87,11 @@ open class ThrioFlutterActivityDelegate(val activity: Activity) : ThrioFlutterAc
         if (pageId == NAVIGATION_ROUTE_PAGE_ID_NONE) throw IllegalStateException("pageId must not be null")
         val holder = PageRoutes.lastRouteHolder(pageId) ?:  throw IllegalStateException("holder must not be null")
         if (holder.routes.size <= 2) {
+            Log.i("ThrioFlutterActiviyDelate", "onBackPressed maybePop");
             ThrioNavigator.maybePop()
         } else {
             engine?.engine?.navigationChannel?.popRoute()
+            Log.i("ThrioFlutterActiviyDelate", "onBackPressed popRoute");
         }
     }
 

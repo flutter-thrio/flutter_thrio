@@ -21,6 +21,7 @@
 
 library flutter_thrio;
 
+export 'src/channel/thrio_back_button_channel_helper.dart';
 export 'src/channel/thrio_channel.dart';
 export 'src/extension/thrio_build_context.dart';
 export 'src/extension/thrio_dynamic.dart';
