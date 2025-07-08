@@ -7,7 +7,7 @@ import 'package:flutter_thrio/flutter_thrio.dart';
 
 import 'flutter5.page.dart';
 
-class Module with ThrioModule, ModulePageBuilder {
+class Module with ThrioModule, ModulePageBuilder, ModuleRouteBuilder {
   @override
   String get key => 'flutter5';
 
@@ -17,4 +17,16 @@ class Module with ThrioModule, ModulePageBuilder {
             moduleContext: moduleContext,
             settings: settings,
           );
+
+  @override
+  void onRouteBuilderSetting(ModuleContext moduleContext) {
+    routeBuilder = (pageBuilder, settings) {
+      return NavigatorPresentRoute(
+        pageBuilder: pageBuilder,
+        settings: settings,
+        barrierDismissible: true,
+        fullscreenDialog: true,
+      );
+    };
+  }
 }
