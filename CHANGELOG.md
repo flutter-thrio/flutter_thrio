@@ -1,3 +1,7 @@
+## 4.20.0
+
+- feat: add NavigatorRoutePopTo and NavigatorRoutePopToMixin
+
 ## 4.19.0
 
 - feat: support delay call onModuleAsyncInit

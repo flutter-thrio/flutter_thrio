@@ -62,7 +62,7 @@ class NavigatorRouteReceiveChannel {
         final handlers = anchor.pushHandlers;
         for (final handler in handlers) {
           final result = await handler(routeSettings, animated: animated);
-          if (result == NavigatorRoutePushHandleType.prevention) {
+          if (result == NavigatorRouteHandleType.prevention) {
             return false;
           }
         }
@@ -134,6 +134,13 @@ class NavigatorRouteReceiveChannel {
           return false;
         }
         final animated = arguments?['animated'] == true;
+        final handlers = anchor.popToHandlers;
+        for (final handler in handlers) {
+          final result = await handler(routeSettings, animated: animated);
+          if (result == NavigatorRouteHandleType.prevention) {
+            return false;
+          }
+        }
         return await ThrioNavigatorImplement.shared()
                 .navigatorState
                 ?.popTo(routeSettings, animated: animated)

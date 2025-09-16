@@ -66,6 +66,10 @@ class ModuleAnchor
   ///
   final pushHandlers = RegistrySet<NavigatorRoutePushHandle>();
 
+  /// Holds PushHandler registered by `NavigatorRoutePush` .
+  ///
+  final popToHandlers = RegistrySet<NavigatorRoutePopToHandle>();
+
   /// A collection of route handlers for matching the key's pattern.
   ///
   final routeCustomHandlers =

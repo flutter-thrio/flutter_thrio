@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage>
         if (settings.url == biz.biz2.flutter2.url) {
           ThrioLogger.d('page2 onPush');
         }
-        return NavigatorRoutePushHandleType.none;
+        return NavigatorRouteHandleType.none;
       },
       child: NavigatorPageNotify(
           name: 'all_page_notify',
