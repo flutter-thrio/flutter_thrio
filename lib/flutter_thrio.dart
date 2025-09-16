@@ -60,6 +60,8 @@ export 'src/navigator/navigator_page_view.dart';
 export 'src/navigator/navigator_route.dart';
 export 'src/navigator/navigator_route_node.dart';
 export 'src/navigator/navigator_route_observer.dart';
+export 'src/navigator/navigator_route_pop_to.dart';
+export 'src/navigator/navigator_route_pop_to_mixin.dart';
 export 'src/navigator/navigator_route_push.dart';
 export 'src/navigator/navigator_route_push_mixin.dart';
 export 'src/navigator/navigator_route_settings.dart';
