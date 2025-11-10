@@ -47,7 +47,6 @@ linter:
     await_only_futures: true # await 只能用于 Future
     unawaited_futures: true # 使用 unawaited 标记忽略的 Future
     unnecessary_await_in_return: true # 除非必要不要在 return 中 await
-    discarded_futures: true # 检测被忽略的 Future
 
     # 资源管理
     cancel_subscriptions: true # 必须取消 StreamSubscription
