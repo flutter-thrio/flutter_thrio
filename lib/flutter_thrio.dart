@@ -19,8 +19,6 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
 
-library flutter_thrio;
-
 export 'src/async/async_task_queue.dart';
 export 'src/channel/thrio_channel.dart';
 export 'src/collection/registry_map.dart';
