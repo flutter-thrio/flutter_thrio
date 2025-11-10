@@ -1,3 +1,13 @@
+## 4.21.0
+
+- fix: prevent hanging when target route not found in pushAndRemove* methods
+- fix: pass engineId to FlutterJNI spawn method for proper multi-engine support
+- chore: bump iOS minimum version to 13.0
+- chore: update example project to latest Gradle (8.9) and Kotlin (2.1.0)
+- chore: update Android SDK to 35 and minSdk to 23
+- refactor: reorganize and modernize analysis_options with 8 logical categories
+- refactor: remove unnecessary library directive
+
 ## 4.19.0
 
 - feat: support delay call onModuleAsyncInit
