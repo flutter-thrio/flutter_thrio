@@ -16,149 +16,257 @@ analyzer:
 # 完整Lint支持列表 https://dart-lang.github.io/linter/lints/
 linter:
   rules:
-    always_declare_return_types: true # prefer 声明方法总是返回类型
-    always_put_control_body_on_new_line: true # prefer 结构体总在新行
-    #always_require_non_null_named_parameters: true # prefer 总是验证必要参数非null
-    # always_specify_types 建议注释掉，因为可能会跟 -avoid_annotating_with_dynamic 冲突
-    annotate_overrides: true # prefer 强制 override 注解
-    avoid_bool_literals_in_conditional_expressions: true # avoid 避免在表达式使用 bool
-    avoid_catches_without_on_clauses: true # avoid 禁止无约束捕获异常
-    avoid_catching_errors: true # avoid 禁止捕获Error
-    avoid_classes_with_only_static_members: true # avoid 禁止类中只定义静态成员
-    # avoid_double_and_int_checks: true #
-    avoid_empty_else: true # avoid 禁止空 else 结构体
-    avoid_equals_and_hash_code_on_mutable_classes: true # avoid
-    avoid_field_initializers_in_const_classes: true # avoid 对于 const 使用 get 减少无用成员变量, !!! JS不能遵循
-    avoid_function_literals_in_foreach_calls: true # avoid 不要使用 foreach 作为 function literal
-    avoid_implementing_value_types: true # avoid
-    avoid_init_to_null: true
-    avoid_js_rounded_ints: true
-    avoid_null_checks_in_equality_operators: true # avoid 禁止重载 == 时进行 null 检查
-    avoid_positional_boolean_parameters: true # avoid 禁止无名称 bool 参数
-    avoid_print: true # avoid
-    avoid_private_typedef_functions: true # prefer
-    avoid_redundant_argument_values: true # avoid
-    avoid_relative_lib_imports: true # 禁止相对路径导包
-    avoid_renaming_method_parameters: true # 禁止重写方法重命名参数名
-    avoid_return_types_on_setters: true # 禁止 set 方法有返回类型
-    avoid_returning_null_for_void: true
-    avoid_returning_this: true # 禁止返回 this
-    avoid_setters_without_getters: true # 禁止定义 set 无 get
-    avoid_shadowing_type_parameters: true # 避免阴影类型
-    avoid_single_cascade_in_expression_statements: true # 禁止单个级联调用
-    avoid_slow_async_io: true # 禁止低速IO操作
-    avoid_types_as_parameter_names: true # 禁止将类型名作为参数名
-    avoid_types_on_closure_parameters: true # 禁止给函数表达式添加类型声明, 可自动类型推断
-    avoid_unused_constructor_parameters: true # 构造方法禁止定义不使用的参数
-    avoid_unnecessary_containers: true
-    avoid_void_async: true # 禁止无返回值的 async 方法
-    avoid_web_libraries_in_flutter: true
-    await_only_futures: true # await 必须使用 Future,保证向后兼容
-    camel_case_extensions: true
-    camel_case_types: true
-    cancel_subscriptions: true # 必须取消 StreamSubscription
-    cascade_invocations: true # 必须使用级联进行连续调用
-    close_sinks: true # 必须关闭 sinks
-    #comment_references # Unused because https://github.com/dart-lang/sdk/issues/36974
-    constant_identifier_names: true # 小写常量名
-    control_flow_in_finally: true # 禁止在 finally 使用控制逻辑
-    curly_braces_in_flow_control_structures: true # 结构体必须使用 {}
-    directives_ordering: true # 导包排序
-    # diagnostic_describe_all_properties: true # 生成代码的方式不可用，先去掉了
-    empty_catches: true # 禁止空 catche
-    empty_constructor_bodies: true # 空构造方法使用 ; 而不是 {}
-    empty_statements: true # 禁止空语句
-    file_names: true # 文件使用 下划线命名法
-    flutter_style_todos: true # 使用 Flutter 风格 TODO
-    hash_and_equals: true # 如果重写 hashCode 必须重写 == 操作符, 反之亦然
-    implementation_imports: true # 禁止导入其他库实现细节文件
-    join_return_with_assignment: true # 可能时合并返回体
-    library_names: true # 库名使用 下划线命名法
-    library_prefixes: true # 使用 下划线命名法 导库
-    library_private_types_in_public_api: false
-    # lines_longer_than_80_chars: true # 行宽80字符
-    literal_only_boolean_expressions: true # 禁止条件判断编译时固定的 bool
-    no_adjacent_strings_in_list: true # 不要在list定义时使用相邻字符串,使用 +
-    no_duplicate_case_values: true # 不要使用多个相同的 case 值
-    no_logic_in_create_state: true # createState 方法不要包含逻辑
-    non_constant_identifier_names: true # 使用小驼峰命名 变量
-    null_closures: true # 禁止使用 null 作为某些系统函数的参数传递
-    missing_whitespace_between_adjacent_strings: true
-    omit_local_variable_types: true # 可推断的局部类型定义可以省略
-    one_member_abstracts: true # 使用 typedef 定义只有一个方法的抽象类(接口)
+    # ============================================================
+    # 错误预防 - Error Prevention
+    # ============================================================
+
+    # 异常处理
+    avoid_catching_errors: true # 避免捕获 Error 类型
     only_throw_errors: true # 只允许 throw Error 和 Exception
-    overridden_fields: true # 不允许重写变量
-    package_names: true # 包名使用 下划线命名法
-    package_prefixed_library_names: true # 库名包名前缀
-    parameter_assignments: true # 禁止为方法参数分配新值
-    prefer_adjacent_string_concatenation: true # 使用相邻字符串连接
-    prefer_asserts_in_initializer_lists: true
-    prefer_collection_literals: true # 如果可能使用 collection literals
-    prefer_conditional_assignment: true # 使用 ??= 判 null
-    prefer_const_constructors: true # 使用 const 实例化常量
-    prefer_const_constructors_in_immutables: true # 推荐对 @immutable 类使用 const 定义构造函数
-    prefer_const_declarations: true # 推荐使用 const , const 对热加载更加友好
-    prefer_const_literals_to_create_immutables: true # 使用 const 实例化 list 和 map 作为函数的不可变参数
-    prefer_constructors_over_static_methods: true # 推荐使用构造方法而不是静态方法构造实例
-    prefer_contains: true # 推荐使用 contains 而不是 indexOf
-    prefer_expression_function_bodies: true # 使用 => 缩短单个返回
-    prefer_final_fields: true # 推荐使用 final 定义私有变量
-    prefer_final_in_for_each: true # 再 for-each 中，如果未重新定义，推荐使用 final
-    prefer_final_locals: true # 对于局部变量，如果未重新定义，推荐使用 final
-    prefer_final_parameters: false # Prefer final for parameter declarations if they are not reassigned.
-    prefer_for_elements_to_map_fromIterable: true
-    prefer_foreach: true # 给所有元素应用某个方法，推荐使用 foreach
-    prefer_function_declarations_over_variables: true # 使用函数声明为函数添加名称
-    prefer_generic_function_type_aliases: true # 推荐使用 通用函数类型别名 而不是 函数类型别名
-    prefer_if_elements_to_conditional_expressions: true
-    prefer_if_null_operators: true
-    prefer_initializing_formals: true # 尽可能使用 initializing formals 是初始化更简单
-    prefer_inlined_adds: true
-    prefer_int_literals: false # 数字可读性展示
-    prefer_interpolation_to_compose_strings: true # 使用插值定于文字
-    prefer_is_empty: true # 不要使用 length 判断集合为空
-    prefer_is_not_empty: true # 不要使用 !x.isEmpty 判断集合不为空
-    prefer_iterable_whereType: true # 推荐使用 iterable.whereType<T>() 而不是 iterable.where((e) => e is T) 判断类型
-    prefer_mixin: true # 推荐使用 mixin
-    prefer_null_aware_operators: true # 推荐使用 ?. 空检查
-    prefer_single_quotes: true # 在不需要转义是使用单引号
-    prefer_spread_collections: true
-    prefer_relative_imports: false # 同一个lib下使用相对路径import
-    prefer_typing_uninitialized_variables: true # 为未初始化变量指定类型
-    prefer_void_to_null: true # 推荐使用 void 而不是 Null
-    provide_deprecation_message: true # 在 Deprecation 说明弃用内容
-    # public_member_api_docs: true # 所有公共成员添加文档
-    recursive_getters: true # 不要递归 get
-    slash_for_doc_comments: true # 推荐使用 /// 而不是 /** 添加文档注释
-    # sort_child_properties_last: true
-    sort_constructors_first: true # 构造函数在所有函数之前
-    #sort_pub_dependencies: true # 对pub依赖排序
-    sort_unnamed_constructors_first: true # 构造函数在所有函数之前
-    test_types_in_equals: true # 在 == 中 判断类型
+    use_rethrow_when_possible: true # 可能时使用 rethrow 重新抛出异常
+
+    # 空值安全
+    avoid_null_checks_in_equality_operators: true # 重载 == 时不需要 null 检查
+    avoid_returning_null_for_void: true # void 函数不要返回 null
+    prefer_null_aware_operators: true # 使用 ?. 进行空检查
+    prefer_conditional_assignment: true # 使用 ??= 赋值
+    prefer_if_null_operators: true # 使用 ?? 操作符
+    unnecessary_null_aware_assignments: true # 避免在 null-aware 中赋值 null
+    unnecessary_null_in_if_null_operators: true # 避免在 ?? 中使用 null
+
+    # 类型安全
+    avoid_types_as_parameter_names: true # 不要将类型名作为参数名
+    unrelated_type_equality_checks: true # 不要比较无关类型
+    test_types_in_equals: true # 在 == 中判断类型
+    valid_regexps: true # 校验正则表达式
+    void_checks: true # 检查 void 的无效使用
+    collection_methods_unrelated_type: true # 防止集合方法使用不相关类型
+
+    # 异步编程
+    avoid_void_async: true # async 函数应该有返回值
+    await_only_futures: true # await 只能用于 Future
+    unawaited_futures: true # 使用 unawaited 标记忽略的 Future
+    unnecessary_await_in_return: true # 除非必要不要在 return 中 await
+    discarded_futures: true # 检测被忽略的 Future
+
+    # 资源管理
+    cancel_subscriptions: true # 必须取消 StreamSubscription
+    close_sinks: true # 必须关闭 Sink
+
+    # 控制流
+    control_flow_in_finally: true # 禁止在 finally 中使用控制流
     throw_in_finally: true # 避免在 finally 中抛出异常
-    type_annotate_public_apis: true # 为公共API方法明确传入类型
-    type_init_formals: true # 如果构造方法存在初始化字段，不用声明参数类型
-    unawaited_futures: true # 使用 unawaited 忽略 Future 返回
-    unnecessary_await_in_return: true # 除非必要不要返回 await
-    unnecessary_brace_in_string_interps: true # 避免在不需要时使用 {} 插值
-    unnecessary_const: true # 避免重复定义 const
-    unnecessary_getters_setters: true # 避免不需要的 get set
-    unnecessary_lambdas: true # 避免不必要的 lamdba
-    unnecessary_new: true # 不要使用 new 关键字
-    unnecessary_null_aware_assignments: true # 避免在 null-aware 中使用 null
-    unnecessary_null_in_if_null_operators: true # 在 if null 操作符中使用 null
-    unnecessary_overrides: true # 避免无效的重写
-    unnecessary_parenthesis: true # 不要使用无效的 ()
-    unnecessary_statements: true # 避免不必要的语句
+    literal_only_boolean_expressions: true # 条件判断不要使用编译时常量
+    no_duplicate_case_values: true # 不要使用重复的 case 值
+
+    # 哈希和相等性
+    hash_and_equals: true # 重写 hashCode 必须重写 ==
+    avoid_equals_and_hash_code_on_mutable_classes: true # 可变类避免重写 == 和 hashCode
+
+    # ============================================================
+    # 代码风格 - Style
+    # ============================================================
+
+    # 命名约定
+    camel_case_extensions: true # 扩展使用驼峰命名
+    camel_case_types: true # 类型使用驼峰命名
+    constant_identifier_names: true # 常量使用小写加下划线
+    file_names: true # 文件名使用下划线命名
+    library_names: true # 库名使用下划线命名
+    library_prefixes: true # import 前缀使用下划线命名
+    non_constant_identifier_names: true # 变量使用小驼峰命名
+    package_names: true # 包名使用下划线命名
+    package_prefixed_library_names: true # 库名使用包名前缀
+
+    # 代码格式
+    always_put_control_body_on_new_line: true # 控制结构体总在新行
+    curly_braces_in_flow_control_structures: true # 控制结构必须使用花括号
+    empty_constructor_bodies: true # 空构造函数使用 ; 而不是 {}
+    unnecessary_brace_in_string_interps: true # 字符串插值避免不必要的 {}
+    unnecessary_parenthesis: true # 避免不必要的括号
+
+    # 声明和定义
+    always_declare_return_types: true # 方法总是声明返回类型
+    annotate_overrides: true # 重写方法使用 @override 注解
+    avoid_init_to_null: true # 变量默认为 null，不需要显式初始化
+    type_annotate_public_apis: true # 公共 API 明确声明类型
+    prefer_typing_uninitialized_variables: true # 未初始化变量指定类型
+
+    # 导入和库
+    avoid_relative_lib_imports: true # 禁止相对路径导入 lib
+    directives_ordering: true # 导入语句排序
+    implementation_imports: true # 禁止导入其他库实现细节
+    combinators_ordering: true # show/hide 排序
+    library_annotations: true # 库级别注解
+    unnecessary_library_directive: true # 移除不必要的 library 指令
+
+    # 文档和注释
+    flutter_style_todos: true # 使用 Flutter 风格 TODO
+    provide_deprecation_message: true # @deprecated 说明弃用原因
+    slash_for_doc_comments: true # 使用 /// 而不是 /** */ 添加文档
+
+    # ============================================================
+    # 代码简化 - Simplification
+    # ============================================================
+
+    # 使用简化语法
+    prefer_adjacent_string_concatenation: true # 使用相邻字符串连接
+    prefer_interpolation_to_compose_strings: true # 使用字符串插值
+    prefer_single_quotes: true # 使用单引号
+    prefer_contains: true # 使用 contains 而不是 indexOf
+    prefer_is_empty: true # 使用 isEmpty 判断空集合
+    prefer_is_not_empty: true # 使用 isNotEmpty 判断非空集合
+    prefer_iterable_whereType: true # 使用 whereType<T>() 过滤类型
+
+    # 避免冗余
+    avoid_redundant_argument_values: true # 避免冗余的参数值
+    avoid_unnecessary_containers: true # 避免不必要的 Container
+    unnecessary_const: true # 避免重复的 const
+    unnecessary_new: true # 不使用 new 关键字
     unnecessary_this: true # 避免不必要的 this
-    unrelated_type_equality_checks: true # 不要比较无关类型相等
-    # unsafe_html
-    use_full_hex_values_for_flutter_colors: true # 使用 argb 声明颜色
-    use_function_type_syntax_for_parameters: true # 对参数类型使用范型方法
-    use_rethrow_when_possible: true # 如果可能使用 rethrow 抛出异常
-    use_setters_to_change_properties: true # 使用 setter 进行属性修改
-    use_string_buffers: true # 使用 StringBuffer 拼接字符
-    use_to_and_as_if_applicable: true # 使用 toXXX asXXX进行类型转换
-    use_super_parameters: true
-    valid_regexps: true # 校验正则
-    void_checks: true # 检查 void 无效使用
+    unnecessary_getters_setters: true # 避免简单的 getter/setter
+    unnecessary_lambdas: true # 避免不必要的 lambda
+    unnecessary_overrides: true # 避免无效的重写
+    unnecessary_statements: true # 避免不必要的语句
+
+    # 使用现代语法
+    prefer_collection_literals: true # 使用集合字面量
+    prefer_for_elements_to_map_fromIterable: true # 使用 for 元素创建集合
+    prefer_if_elements_to_conditional_expressions: true # 使用 if 元素
+    prefer_inlined_adds: true # 内联 add 操作
+    prefer_spread_collections: true # 使用展开运算符
+    use_super_parameters: true # 使用 super 参数简化构造函数
+    matching_super_parameters: true # super 参数匹配父类
+
+    # ============================================================
+    # 最佳实践 - Best Practices
+    # ============================================================
+
+    # 构造函数
+    prefer_const_constructors: true # 可能时使用 const 构造函数
+    prefer_const_constructors_in_immutables: true # @immutable 类使用 const 构造函数
+    prefer_const_declarations: true # 使用 const 声明
+    prefer_const_literals_to_create_immutables: true # 不可变参数使用 const 字面量
+    prefer_constructors_over_static_methods: true # 使用构造函数而不是静态方法
+    avoid_unused_constructor_parameters: true # 构造函数不要有未使用的参数
+    prefer_initializing_formals: true # 使用 initializing formals
+    type_init_formals: true # 构造参数不需要重复类型声明
+
+    # final 和 immutability
+    prefer_final_fields: true # 私有字段使用 final
+    prefer_final_in_for_each: true # for-each 中使用 final
+    prefer_final_locals: true # 局部变量使用 final
+    prefer_final_parameters: false # 参数不强制 final（过于严格）
+
+    # 函数和方法
+    avoid_renaming_method_parameters: true # 重写方法不要重命名参数
+    avoid_return_types_on_setters: true # setter 不要声明返回类型
+    avoid_setters_without_getters: true # setter 必须有对应的 getter
+    prefer_function_declarations_over_variables: true # 使用函数声明
+    prefer_generic_function_type_aliases: true # 使用泛型函数类型别名
+    use_function_type_syntax_for_parameters: true # 参数使用函数类型语法
+    use_setters_to_change_properties: true # 使用 setter 修改属性
+    use_to_and_as_if_applicable: true # 使用 toXxx/asXxx 进行类型转换
+    recursive_getters: true # 避免递归 getter
+
+    # 类设计
+    avoid_classes_with_only_static_members: true # 避免只有静态成员的类
+    avoid_implementing_value_types: true # 避免实现值类型
+    avoid_private_typedef_functions: true # 避免私有 typedef
+    avoid_shadowing_type_parameters: true # 避免遮蔽类型参数
+    overridden_fields: true # 不要重写字段
+    library_private_types_in_public_api: false # 允许在公共 API 中使用私有类型
+
+    # ============================================================
+    # Flutter 特定 - Flutter Specific
+    # ============================================================
+
+    # Widget 优化
+    use_colored_box: true # 优先使用 ColoredBox
+    use_decorated_box: true # 优先使用 DecoratedBox
+    sized_box_for_whitespace: true # 使用 SizedBox 创建空白
+    use_key_in_widget_constructors: true # Widget 构造函数使用 key
+
+    # Flutter API
+    no_logic_in_create_state: true # createState 不要包含逻辑
+    use_build_context_synchronously: true # 异步后不要直接使用 BuildContext
+    use_full_hex_values_for_flutter_colors: true # 使用完整的 hex 颜色值
+    avoid_web_libraries_in_flutter: true # Flutter 中避免使用 web 库
+
+    # ============================================================
+    # 性能 - Performance
+    # ============================================================
+
+    # 字符串操作
+    use_string_buffers: true # 拼接字符串使用 StringBuffer
+    no_adjacent_strings_in_list: true # list 中不要使用相邻字符串
+    missing_whitespace_between_adjacent_strings: true # 相邻字符串之间要有空格
+
+    # IO 操作
+    avoid_slow_async_io: true # 避免慢速异步 IO
+
+    # ============================================================
+    # 代码检查 - Code Checks
+    # ============================================================
+
+    # 未使用代码
+    unreachable_from_main: true # 检测从 main 无法访问的代码
+
+    # 代码质量
+    avoid_bool_literals_in_conditional_expressions: true # 条件表达式避免 bool 字面量
+    avoid_empty_else: true # 避免空 else
+    empty_catches: true # 避免空 catch
+    empty_statements: true # 避免空语句
+    join_return_with_assignment: true # 合并返回和赋值
+    null_closures: true # 不要传递 null 作为 closure
+
+    # 特定场景
+    avoid_js_rounded_ints: true # JS 中避免四舍五入的整数
+    avoid_field_initializers_in_const_classes: true # const 类使用 getter
+    avoid_positional_boolean_parameters: true # 避免位置 bool 参数
+    avoid_print: true # 避免使用 print（使用 logger）
+    avoid_single_cascade_in_expression_statements: true # 避免单个级联调用
+
+    # ============================================================
+    # 类型推断和声明 - Type Inference
+    # ============================================================
+
+    # 允许类型推断
+    omit_local_variable_types: true # 局部变量可省略类型
+    prefer_void_to_null: true # 使用 void 而不是 Null
+
+    # ============================================================
+    # 实验性和可选 - Experimental / Optional
+    # ============================================================
+
+    # 排序（可选，根据团队习惯）
+    sort_constructors_first: true # 构造函数排在最前
+    sort_unnamed_constructors_first: true # 未命名构造函数排在最前
+    # sort_pub_dependencies: true # pub 依赖排序（可选）
+    # sort_child_properties_last: true # child 属性排在最后（可选）
+
+    # 不推荐的规则（根据项目需要可以启用）
+    # lines_longer_than_80_chars: true # 限制行长度 80 字符
+    # public_member_api_docs: true # 所有公共成员添加文档
+    # always_specify_types: true # 总是指定类型（与类型推断冲突）
+    # diagnostic_describe_all_properties: true # 描述所有属性
+    # prefer_relative_imports: true # 使用相对路径导入
+
+    # ============================================================
+    # 已弃用或有争议的规则（已移除）
+    # ============================================================
+
+    # avoid_returning_this - 已弃用，方法链需要返回 this
+    # avoid_catches_without_on_clauses - 过于严格
+    # cascade_invocations - 过于严格，不是所有连续调用都适合级联
+    # one_member_abstracts - 过于严格，单方法接口有其用途
+    # parameter_assignments - 过于严格，有时需要修改参数
+    # prefer_expression_function_bodies - 过于严格，复杂逻辑不适合单行
+    # prefer_foreach - 与 avoid_function_literals_in_foreach_calls 冲突
+    # prefer_int_literals - 不够灵活
+    # avoid_types_on_closure_parameters - 有时显式类型更清晰
+
+    # Dart 2 时代的规则
+    # prefer_asserts_in_initializer_lists - 已过时
+    # dangling_library_doc_comments - 需要 Dart 3.0+
+    # implicit_call_tearoffs - 需要 Dart 2.15+
