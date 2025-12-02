@@ -1,3 +1,7 @@
+## 4.21.1
+
+- feat: auto hotrestart 2s
+
 ## 4.21.0
 
 - fix: prevent hanging when target route not found in pushAndRemove* methods

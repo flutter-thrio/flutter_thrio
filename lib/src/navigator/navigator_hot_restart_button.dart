@@ -45,7 +45,7 @@ class _NavigatorHotRestartButtonState extends State<NavigatorHotRestartButton> {
     super.initState();
     if (mounted) {
       _initAppear
-          .runOnce(() => Future.delayed(const Duration(milliseconds: 1000), () {
+          .runOnce(() => Future.delayed(const Duration(milliseconds: 2000), () {
                 final routes =
                     ThrioNavigatorImplement.shared().allFlutterRoutes();
                 if (routes.length < 2) {
